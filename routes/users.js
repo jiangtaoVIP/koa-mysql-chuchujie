@@ -1,13 +1,11 @@
 const router = require('koa-router')()
-
-router.prefix('/users')
+// const mySqlServer = require("../mysql/index.js")
+const user = require('../controller/user')
+router.prefix('/user')
 
 router.get('/', function (ctx, next) {
   ctx.body = 'this is a users response!'
 })
-
-router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response'
-})
+router.get('/getList', user.getList)
 
 module.exports = router
