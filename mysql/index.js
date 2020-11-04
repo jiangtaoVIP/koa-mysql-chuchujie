@@ -12,12 +12,15 @@ function mySql(sql, params) {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
+        console.log("sql语句错误", err)
         resolve(err)
       } else {
         connection.query(sql, params, (err, result) => {
           if (err) {
+            console.log("参数错误", err)
             reject(err)
           } else {
+            console.log("sql成功")
             resolve(result)
           }
           connection.release()
