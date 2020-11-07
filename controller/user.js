@@ -1,7 +1,6 @@
 const mySqlServer = require("../mysql/index.js")
-
+const jwt = require('jsonwebtoken')
 exports.getList = async (ctx, next) => {
-  await next()
   /*
   获取用户列表
   page = 页码（必填）
@@ -18,8 +17,7 @@ exports.getList = async (ctx, next) => {
     ctx.fail('参数错误', -1)
     return
   }
-  let sql = [
-    // `SELECT * FROM user limit ${(page-1)*size},${size};`,
+  const sql = [
     `select count(*) from user where userName like '%${userName}%' and phone like '%${phone}%';`,
     `select * from user where userName like '%${userName}%' and phone like '%${phone}%' limit ${(page-1)*size},${size};`,
   ]
@@ -43,4 +41,33 @@ exports.getList = async (ctx, next) => {
   // } else {
   //   ctx.fail('查询失败', -1)
   // }
+}
+exports.login = async (ctx, next) => {
+  /*
+  登陆
+  userName = 账号（必填）
+  password = 密码（必填）
+  */
+ const { userName, password } = ctx.request.body
+ if (!userName || !password) {
+  ctx.fail('参数错误', -1)
+  return
+ }
+ const sql = `select * from user where userName = ${userName} and password = ${password}`
+ const res = await mySqlServer.mySql(sql)
+ if (res.length === 1 && userName == res[0].userName && password == res[0].password) {
+   const token = jwt.sign({
+     name: res[0].userName,
+     id: res[0].userId
+   }, 'my_token', { expiresIn: '2h' })
+   ctx.success(token, '登陆成功')
+ } else {
+  ctx.fail('用户名或密码错误', -1)
+ }
+ console.log(res)
+}
+
+exports.register = async (ctx, next) => {
+  ctx.success('shab', 'aaa')
+  await next()
 }
