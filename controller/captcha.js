@@ -14,4 +14,5 @@ exports.verification = async (ctx, next) => {
     ctx.session.captcha = captcha.text.toLowerCase()
     ctx.set('Content-Type', 'image/svg+xml')
     ctx.body = captcha.data // 验证码
+    console.log('验证码', ctx.session.captcha)
   }

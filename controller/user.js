@@ -65,7 +65,7 @@ exports.login = async (ctx, next) => {
    const token = jwt.sign({
      name: res[0].userName,
      id: res[0].userId
-   }, 'my_token', { expiresIn: '2h' })
+   }, 'my_token', { expiresIn: '7d' })
    ctx.success(token, '登陆成功')
  } else {
   ctx.fail('用户名或密码错误', -1)

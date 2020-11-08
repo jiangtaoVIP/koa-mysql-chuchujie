@@ -1,5 +1,6 @@
 const Koa = require('koa')
 const app = new Koa()
+const path = require('path')
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
@@ -19,9 +20,12 @@ const sessionConfig = require('./config/session')
 
 const cors = require('koa2-cors');
 
+const static = require('koa-static');
+
 const index = require('./routes/index')
 const users = require('./routes/users')
 const captcha = require('./routes/captcha')
+const upload = require('./routes/upload')
 
 // error handler
 onerror(app)
@@ -36,7 +40,11 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+
+// 设置整个服务器端口为静态资源文件 本来想设置多个文件夹 未能解决
+app.use(static(__dirname))
+// app.use(require('koa-static')(__dirname + '/upload'))
+// app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
@@ -68,7 +76,7 @@ app.use((ctx, next) => {
 app.use(koajwt({
   secret: 'my_token'
 }).unless({
-  path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/]
+  path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/]
 }))
 
 // logger
@@ -86,6 +94,7 @@ app.use(session)
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(captcha.routes(), captcha.allowedMethods())
+app.use(upload.routes(), upload.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
