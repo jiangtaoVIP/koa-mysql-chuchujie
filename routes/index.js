@@ -1,6 +1,6 @@
 const router = require('koa-router')()
 const mySqlServer = require("../mysql/index.js")
-const message = require('../middleware/routerResponse')
+
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
     title: 'Hello Koa 2!'

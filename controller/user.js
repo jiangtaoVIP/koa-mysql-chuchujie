@@ -33,7 +33,7 @@ exports.getList = async (ctx, next) => {
       result['size'] = parseInt(size)
     }
   })
-  ctx.success(result, '查询成功')
+  ctx.success(result, '成功')
   // var result = await mySqlServer.mySql(sql)
   // if (result) {
   //     console.log('查询成功', ctx, result)
@@ -47,11 +47,17 @@ exports.login = async (ctx, next) => {
   登陆
   userName = 账号（必填）
   password = 密码（必填）
+  captcha = 验证码（必填）
   */
- const { userName, password } = ctx.request.body
+ const { userName, password, captcha } = ctx.request.body
  if (!userName || !password) {
   ctx.fail('参数错误', -1)
   return
+ }
+ console.log(ctx.session.captcha, '验证码')
+ if (ctx.session.captcha != captcha.toLowerCase()) {
+   ctx.fail('验证码有误', -1)
+   return
  }
  const sql = `select * from user where userName = ${userName} and password = ${password}`
  const res = await mySqlServer.mySql(sql)
@@ -64,10 +70,26 @@ exports.login = async (ctx, next) => {
  } else {
   ctx.fail('用户名或密码错误', -1)
  }
- console.log(res)
 }
 
 exports.register = async (ctx, next) => {
-  ctx.success('shab', 'aaa')
-  await next()
+   /*
+  注册
+  userName = 账号（必填）
+  password = 密码（必填）
+  */
+  const data = ctx.request.body
+  if (!data.userName || !data.password) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const params = [data.userName, data.password, data.sex, data.phone, data.city, data.area, data.avatar]
+  const sql = `insert into user (userName,password,sex,phone,city,area,avatar) values (?,?,?,?,?,?,?)`
+  const res = await mySqlServer.mySql(sql, params)
+  if (res) {
+    ctx.success({userName: data.userName}, '成功')
+  } else {
+    ctx.fail('参数错误', -1)
+  }
 }
+

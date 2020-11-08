@@ -11,11 +11,24 @@ const routerResponse =  require('./middleware/routerResponse')
 // 引入 jwt
 const koajwt = require('koa-jwt')
 
+// 引入 koa-session
+const Koa_Session = require('koa-session')
+// signed属性签名key
+const session_signed_key = ['appletsystem']
+const sessionConfig = require('./config/session')
+
+const cors = require('koa2-cors');
+
 const index = require('./routes/index')
 const users = require('./routes/users')
+const captcha = require('./routes/captcha')
 
 // error handler
 onerror(app)
+
+app.use(cors({
+  credentials: true
+}))
 
 // middlewares
 app.use(bodyparser({
@@ -55,7 +68,7 @@ app.use((ctx, next) => {
 app.use(koajwt({
   secret: 'my_token'
 }).unless({
-  path: [/\/user\/login/, /\/user\/register/]
+  path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/]
 }))
 
 // logger
@@ -65,11 +78,14 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
-
-
+// session 实例化
+const session = Koa_Session(sessionConfig, app)
+app.keys = session_signed_key
+app.use(session)
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(captcha.routes(), captcha.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
