@@ -30,6 +30,7 @@ const upload = require('./routes/upload')
 // error handler
 onerror(app)
 
+// 跨域
 app.use(cors({
   credentials: true
 }))
@@ -90,6 +91,16 @@ app.use(async (ctx, next) => {
 const session = Koa_Session(sessionConfig, app)
 app.keys = session_signed_key
 app.use(session)
+
+// koa-body
+const koaBody = require('koa-body')
+app.use(koaBody({
+    multipart: true,
+    formidable: {
+        maxFileSize: 10000*1024*1024    // 设置上传文件大小最大限制，默认2M
+    }
+}))
+
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
