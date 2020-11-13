@@ -5,7 +5,7 @@ module.exports =  function routerResponse(option={}){
           ctx.body = {
               code : option.successCode || 0,
               msg : msg,
-              data : data
+              data : data ? data : undefined
           }
       }
 

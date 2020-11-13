@@ -26,6 +26,7 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const captcha = require('./routes/captcha')
 const upload = require('./routes/upload')
+const address = require('./routes/address')
 
 // error handler
 onerror(app)
@@ -106,6 +107,7 @@ app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(captcha.routes(), captcha.allowedMethods())
 app.use(upload.routes(), upload.allowedMethods())
+app.use(address.routes(), address.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

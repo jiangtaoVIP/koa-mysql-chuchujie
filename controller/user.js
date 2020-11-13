@@ -87,7 +87,7 @@ exports.register = async (ctx, next) => {
   const sql = `insert into user (userName,password,sex,phone,city,area,avatar) values (?,?,?,?,?,?,?)`
   const res = await mySqlServer.mySql(sql, params)
   if (res) {
-    ctx.success({userName: data.userName}, '成功')
+    ctx.success('', '成功')
   } else {
     ctx.fail('参数错误', -1)
   }
