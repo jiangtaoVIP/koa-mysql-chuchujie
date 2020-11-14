@@ -4,7 +4,7 @@ const path = require('path')
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
-const bodyparser = require('koa-bodyparser')
+// const bodyparser = require('koa-bodyparser')
 
 const logger = require('koa-logger')
 // 引入中间件 统一消息返回处理
@@ -18,9 +18,9 @@ const Koa_Session = require('koa-session')
 const session_signed_key = ['appletsystem']
 const sessionConfig = require('./config/session')
 
-const cors = require('koa2-cors');
+const cors = require('koa2-cors')
 
-const static = require('koa-static');
+const static = require('koa-static')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -37,9 +37,9 @@ app.use(cors({
 }))
 
 // middlewares
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
+// app.use(bodyparser({
+//   enableTypes:['json', 'form', 'text']
+// }))
 app.use(json())
 app.use(logger())
 
@@ -98,7 +98,8 @@ const koaBody = require('koa-body')
 app.use(koaBody({
     multipart: true,
     formidable: {
-        maxFileSize: 10000*1024*1024    // 设置上传文件大小最大限制，默认2M
+      keepExtensions: true,
+      maxFileSize: 200 * 1024 * 1024    // 设置上传文件大小最大限制，默认2M
     }
 }))
 
