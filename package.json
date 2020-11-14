@@ -24,8 +24,10 @@
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
     "koa2-cors": "^2.0.6",
+    "koa2-swagger-ui": "^5.0.3",
     "mysql": "^2.18.1",
-    "svg-captcha": "^1.4.0"
+    "svg-captcha": "^1.4.0",
+    "swagger-jsdoc": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

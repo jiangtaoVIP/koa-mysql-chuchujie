@@ -79,32 +79,30 @@ exports.delete = async (ctx) => {
     }
   }
 }
-exports.getList = async (ctx) => {
+exports.getList = async (ctx, next) => {
   /*
     获取用户的收货地址列表
     token 获取
   */
  const token = ctx.request.header.authorization.substring(7)
+ let ids = ''
  if (!token || token == '') {
    ctx.fail('失败', -1)
    return
  }
-  jwt.verify(token, 'my_token', async (err, authData) => {
+  jwt.verify(token, 'my_token', (err, authData) => {
     if (!err) {
-      console.log(authData.id)
-      const sql = `select * from shop_address where parentId=${userId}`
-      const a = await mySqlServer.mySql(sql)
-      ctx.success(a, '成功')
+      ids = authData.id
     } else {
-      ctx.fail('失败', -1)
+      ids = -1
     }
   })
-  // function selectAddress() {
-  //   const sql = `select * from shop_address where parentId=${userId}`
-  //   mySqlServer.mySql(sql).then(res => {
-  //     if (res) {
-  //       ctx.success(res, '成功')
-  //     }
-  //   })
-  // }
+  if (ids != -1 && ids != '') {
+    const sql = `select * from shop_address where parentId=${ids}`
+    const res = await mySqlServer.mySql(sql)
+    ctx.success(res, '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+  
 }

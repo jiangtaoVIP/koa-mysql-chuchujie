@@ -17,6 +17,7 @@ const Koa_Session = require('koa-session')
 // signed属性签名key
 const session_signed_key = ['appletsystem']
 const sessionConfig = require('./config/session')
+const koaSwagger = require('koa2-swagger-ui').koaSwagger;
 
 const cors = require('koa2-cors')
 
@@ -31,6 +32,17 @@ const address = require('./routes/address')
 // error handler
 onerror(app)
 
+// swagger配置
+const swagger = require('./config/swagger');
+app.use(swagger.routes(), swagger.allowedMethods())
+app.use(
+  koaSwagger({
+    routePrefix: '/swagger', // host at /swagger instead of default /docs
+    swaggerOptions: {
+      url: '/swagger.json' // example path to json
+    }
+  })
+);
 // 跨域
 app.use(cors({
   credentials: true
@@ -80,7 +92,6 @@ app.use(koajwt({
 }).unless({
   path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/]
 }))
-
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
@@ -109,7 +120,6 @@ app.use(users.routes(), users.allowedMethods())
 app.use(captcha.routes(), captcha.allowedMethods())
 app.use(upload.routes(), upload.allowedMethods())
 app.use(address.routes(), address.allowedMethods())
-
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
