@@ -93,3 +93,25 @@ exports.register = async (ctx, next) => {
   }
 }
 
+exports.getInfo = async (ctx) => {
+  let ids = -1
+  const token = ctx.request.header.authorization.substring(7)
+  if (!token || token == '') {
+    ctx.fail('失败', -1)
+    return
+  }
+  jwt.verify(token, 'my_token', (err, authData) => {
+    if (!err) {
+      ids = authData.id
+    } else {
+      ids = -1
+    }
+  })
+  if (ids != -1) {
+    const sql = `select * from user where userId=${ids}`
+    const res = await mySqlServer.mySql(sql)
+    ctx.success(res[0], '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+}

@@ -93,4 +93,17 @@ router.post('/login', user.login)
  */
 // #endregion
 router.post('/register', user.register)
+// #region
+/**
+ * @swagger
+ * /user/getInfo:
+ *   get:
+ *     description: 取得用户信息
+ *     tags: [用户模块]
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.get('/getInfo', user.getInfo)
 module.exports = router
