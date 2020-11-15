@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 14/11/2020 01:39:16
+ Date: 15/11/2020 18:23:02
 */
 
 SET NAMES utf8mb4;
@@ -99,9 +99,85 @@ INSERT INTO `file` VALUES (10012, 'aaaa.jpg', '241027', 'jpg', '2020-11-10 16:02
 DROP TABLE IF EXISTS `goodsdetails`;
 CREATE TABLE `goodsdetails`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品',
+  `parentId` int(11) NOT NULL COMMENT '该商品所属的二级分类id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
+  `iconId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品缩略图',
+  `homeImageIds` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品首页轮播',
+  `detailsImageIds` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品详情图',
+  `hot` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品火热小字段',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goodsdetails
+-- ----------------------------
+INSERT INTO `goodsdetails` VALUES (1, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', 'https://s10.mogucdn.com/mlcdn/c45406/180821_1bb8lfgjie5e5fl2e1j4il29jl5ch_160x160.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', '火热爆款', '2020-11-15 01:06:29', '2020-11-15 18:19:28');
+INSERT INTO `goodsdetails` VALUES (2, 1, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮', 'https://s10.mogucdn.com/mlcdn/c45406/180821_1bb8lfgjie5e5fl2e1j4il29jl5ch_160x160.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', '新品上新', '2020-11-15 01:36:19', '2020-11-15 18:19:11');
+INSERT INTO `goodsdetails` VALUES (3, 2, 'dssdsdsd', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:31', '2020-11-15 18:19:11');
+INSERT INTO `goodsdetails` VALUES (4, 3, 'fsfsff', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:39', '2020-11-15 18:19:10');
+INSERT INTO `goodsdetails` VALUES (5, 1, 'dsffa', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:43', '2020-11-15 18:18:53');
+INSERT INTO `goodsdetails` VALUES (6, 4, 'dsddd', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:55', '2020-11-15 18:18:52');
+
+-- ----------------------------
+-- Table structure for goodsdetails_sku
+-- ----------------------------
+DROP TABLE IF EXISTS `goodsdetails_sku`;
+CREATE TABLE `goodsdetails_sku`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'sku id',
+  `parentId` int(11) NULL DEFAULT NULL COMMENT '所属的商品父级id',
+  `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '该选项的价格',
+  `stock` decimal(10, 0) NULL DEFAULT NULL COMMENT '该选项的库存',
+  `skuImageIds` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '该选项的缩略图',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goodsdetails_sku
+-- ----------------------------
+INSERT INTO `goodsdetails_sku` VALUES (1, 1, 11.00, 12212, NULL, '2020-11-15 01:14:37', '2020-11-15 01:53:23');
+INSERT INTO `goodsdetails_sku` VALUES (2, 1, 12.00, 12, NULL, '2020-11-15 01:53:18', '2020-11-15 12:14:59');
+INSERT INTO `goodsdetails_sku` VALUES (3, 2, 21.00, 12, NULL, '2020-11-15 12:54:55', '2020-11-15 12:54:55');
+
+-- ----------------------------
+-- Table structure for goodsdetails_type
+-- ----------------------------
+DROP TABLE IF EXISTS `goodsdetails_type`;
+CREATE TABLE `goodsdetails_type`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '类型id',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类型名称',
+  `skuId` int(255) NULL DEFAULT NULL COMMENT '关联的sku ID',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `parentId` int(11) NOT NULL COMMENT '所属商品id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goodsdetails_type
+-- ----------------------------
+INSERT INTO `goodsdetails_type` VALUES (1, 'S', 1, '2020-11-15 12:13:22', '2020-11-15 12:23:48', 1);
+INSERT INTO `goodsdetails_type` VALUES (2, 'M', 2, '2020-11-15 12:13:34', '2020-11-15 12:23:51', 1);
+INSERT INTO `goodsdetails_type` VALUES (3, '41码', 3, '2020-11-15 13:10:32', '2020-11-15 13:10:32', 2);
+
+-- ----------------------------
+-- Table structure for message
+-- ----------------------------
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '通知id',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '通知消息内容',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of message
+-- ----------------------------
+INSERT INTO `message` VALUES (1, '内测期间！双32全场一折、双32全场一折、双32全场一折、双32全场一折 ！！！ ');
+INSERT INTO `message` VALUES (2, '222222');
 
 -- ----------------------------
 -- Table structure for shop_address

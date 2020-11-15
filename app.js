@@ -28,6 +28,8 @@ const users = require('./routes/users')
 const captcha = require('./routes/captcha')
 const upload = require('./routes/upload')
 const address = require('./routes/address')
+const goods = require('./routes/goods')
+const home = require('./routes/home')
 
 // error handler
 onerror(app)
@@ -120,6 +122,8 @@ app.use(users.routes(), users.allowedMethods())
 app.use(captcha.routes(), captcha.allowedMethods())
 app.use(upload.routes(), upload.allowedMethods())
 app.use(address.routes(), address.allowedMethods())
+app.use(goods.routes(), goods.allowedMethods())
+app.use(home.routes(), home.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
