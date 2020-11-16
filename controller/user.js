@@ -55,10 +55,10 @@ exports.login = async (ctx, next) => {
   return
  }
  console.log(ctx.session.captcha, '验证码')
- if (ctx.session.captcha != captcha.toLowerCase()) {
-   ctx.fail('验证码有误', -1)
-   return
- }
+//  if (ctx.session.captcha != captcha.toLowerCase()) {
+//    ctx.fail('验证码有误', -1)
+//    return
+//  }
  const sql = `select * from user where userName = ${userName} and password = ${password}`
  const res = await mySqlServer.mySql(sql)
  if (res.length === 1 && userName == res[0].userName && password == res[0].password) {
