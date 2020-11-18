@@ -149,4 +149,30 @@ router.post('/delete', address.delete)
  */
 // #endregion
 router.get('/getList', address.getList)
+// #region
+/**
+ * @swagger
+ * /address/getList:
+ *   get:
+ *     description: 设置用户默认地址
+ *     tags: [地址模块]
+ *     produces:
+ *        - application/json
+ *     parameters:
+ *       - name: id
+ *         description: 地址id
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: isDefault
+ *         description: bool
+ *         in: formData
+ *         required: true
+ *         type: boolean
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/defaultAddress', address.defaultAddress)
 module.exports = router

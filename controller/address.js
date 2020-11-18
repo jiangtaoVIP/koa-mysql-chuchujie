@@ -100,9 +100,64 @@ exports.getList = async (ctx, next) => {
   if (ids != -1 && ids != '') {
     const sql = `select * from shop_address where parentId=${ids}`
     const res = await mySqlServer.mySql(sql)
+    if (res.length > 0) {
+      res.forEach(item => {
+        item['isDefault'] = item.isDefault != 0
+      })
+    }
     ctx.success(res, '成功')
   } else {
     ctx.fail('失败', -1)
   }
   
+}
+exports.defaultAddress = async(ctx) => {
+  // 设置默认地址
+  const data = ctx.request.body
+  if (!data.id || data.isDefault == undefined) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const token = ctx.request.header.authorization.substring(7)
+  const isDefault = data.isDefault ? 1 : 0
+  let parentId = null
+  jwt.verify(token, 'my_token', (err, authData) => {
+    if (!err) {
+      parentId = authData.id
+    } else {
+      parentId = -1
+    }
+  })
+  const getList = new Promise(async (resolve, reject) => {
+    const sql = `select * from shop_address where parentId=${parentId}`
+    const res = await mySqlServer.mySql(sql)
+    if (res && res.length > 0) {
+      res.forEach(item => {
+        if (item.isDefault == 1) {
+          const mySql = `update shop_address set isDefault=0 where id=${item.id}`
+          mySqlServer.mySql(mySql).then(res => {
+            if (res) {
+              resolve(res)
+            }
+          }).catch(err => {
+            reject(err)
+          })
+        }
+      })
+    }
+    resolve(res)
+  })
+  const onDefault = new Promise(async(resolve, reject) => {
+    console.log(isDefault, data.id)
+    const sql = `update shop_address set isDefault=${isDefault} where id=${data.id}`
+    const res = await mySqlServer.mySql(sql)
+    console.log(res)
+    if (res) {
+      resolve(res)
+    }
+    resolve(res)
+  })
+  const res = await Promise.all([getList])
+
+  ctx.success(res, '成功')
 }
