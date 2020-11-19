@@ -175,4 +175,30 @@ router.get('/getList', address.getList)
  */
 // #endregion
 router.post('/defaultAddress', address.defaultAddress)
+// #region
+/**
+ * @swagger
+ * /address/getDetails:
+ *   post:
+ *     description: 查询地址详情
+ *     tags: [地址模块]
+ *     produces:
+ *        - application/json
+ *     parameters:
+ *       - name: id
+ *         description: 地址id
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: isDefault
+ *         description: bool
+ *         in: formData
+ *         required: true
+ *         type: boolean
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/getDetails', address.getDetails)
 module.exports = router

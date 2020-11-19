@@ -177,3 +177,20 @@ exports.defaultAddress = async(ctx) => {
     ctx.fail('失败', -1)
   }
 }
+
+exports.getDetails = async (ctx) => {
+  // 查询地址详情
+  const data = ctx.request.body
+  if (!data.id) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const sql = `select * from shop_address where id=${data.id}`
+  const res = await mySqlServer.mySql(sql)
+  if (res && res.length > 0) {
+    res[0]['isDefault'] = res[0].isDefault != 0
+    ctx.success(res[0], '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+}
