@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3301
  Source Server Type    : MySQL
- Source Server Version : 50726
+ Source Server Version : 80012
  Source Host           : localhost:3301
  Source Schema         : shop
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 15/11/2020 18:23:02
+ Date: 19/11/2020 18:38:59
 */
 
 SET NAMES utf8mb4;
@@ -193,6 +193,7 @@ CREATE TABLE `shop_address`  (
   `county` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '区域',
   `addressDetail` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '详细地址',
   `areaCode` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '邮政编码',
+  `isDefault` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否为默认（0，false，1,true）',
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`, `parentId`) USING BTREE
@@ -201,9 +202,8 @@ CREATE TABLE `shop_address`  (
 -- ----------------------------
 -- Records of shop_address
 -- ----------------------------
-INSERT INTO `shop_address` VALUES (1, 1, '江涛', '18899796648', '广东省', '广州市', '天河区', '车陂此前大街', '517400', '2020-11-14 00:19:55', '2020-11-14 00:19:55');
-INSERT INTO `shop_address` VALUES (3, 1, 'sdsd', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-14 01:05:08', '2020-11-14 01:05:08');
-INSERT INTO `shop_address` VALUES (4, 2, 'sa', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-14 01:05:13', '2020-11-14 01:05:13');
+INSERT INTO `shop_address` VALUES (1, 1, '江涛', '18899796648', '广东省', '广州市', '天河区', '车陂此前大街', '517400', 1, '2020-11-14 00:19:55', '2020-11-19 18:17:33');
+INSERT INTO `shop_address` VALUES (4, 2, 'sa', NULL, NULL, NULL, NULL, NULL, NULL, 0, '2020-11-14 01:05:13', '2020-11-18 10:29:12');
 
 -- ----------------------------
 -- Table structure for user

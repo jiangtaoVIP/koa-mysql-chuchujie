@@ -120,7 +120,7 @@ exports.defaultAddress = async(ctx) => {
   }
   const token = ctx.request.header.authorization.substring(7)
   const isDefault = data.isDefault ? 1 : 0
-  let parentId = null
+  let parentId = null // 用户id
   jwt.verify(token, 'my_token', (err, authData) => {
     if (!err) {
       parentId = authData.id
@@ -128,36 +128,52 @@ exports.defaultAddress = async(ctx) => {
       parentId = -1
     }
   })
+  // 用户id
+  if (!parentId || parentId == -1) {
+    ctx.fail('参数错误', -1)
+    return
+  }
   const getList = new Promise(async (resolve, reject) => {
+    // 先列出该用户 的所有地址列表
     const sql = `select * from shop_address where parentId=${parentId}`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
       res.forEach(item => {
+        // 判断其中是否有默认地址
         if (item.isDefault == 1) {
+          // 有的话修改为 否
           const mySql = `update shop_address set isDefault=0 where id=${item.id}`
           mySqlServer.mySql(mySql).then(res => {
             if (res) {
-              resolve(res)
+              // 修改默认地址状态
+              const onSql = `update shop_address set isDefault=${isDefault} where id=${data.id}`
+              mySqlServer.mySql(onSql).then(res => {
+                if (res) {
+                  resolve(res)
+                }
+              })
             }
           }).catch(err => {
             reject(err)
           })
+        } else {
+          // 修改默认地址状态
+          const onSql = `update shop_address set isDefault=${isDefault} where id=${data.id}`
+          mySqlServer.mySql(onSql).then(res => {
+            if (res) {
+              resolve(res)
+            }
+          })
         }
       })
+    } else {
+      resolve()
     }
-    resolve(res)
   })
-  const onDefault = new Promise(async(resolve, reject) => {
-    console.log(isDefault, data.id)
-    const sql = `update shop_address set isDefault=${isDefault} where id=${data.id}`
-    const res = await mySqlServer.mySql(sql)
-    console.log(res)
-    if (res) {
-      resolve(res)
-    }
-    resolve(res)
-  })
-  const res = await Promise.all([getList])
-
-  ctx.success(res, '成功')
+  const res = await getList
+  if (res) {
+    ctx.success('', '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
 }

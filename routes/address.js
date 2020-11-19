@@ -152,8 +152,8 @@ router.get('/getList', address.getList)
 // #region
 /**
  * @swagger
- * /address/getList:
- *   get:
+ * /address/defaultAddress:
+ *   post:
  *     description: 设置用户默认地址
  *     tags: [地址模块]
  *     produces:
