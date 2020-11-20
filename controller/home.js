@@ -41,6 +41,30 @@ exports.getData = async (ctx, next) => {
     const sql = `select * from goodsdetails order by rand() limit 4`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
+      const promise = res.map(b => mySqlServer.mySql(`select * from goodsdetails_sku where parentId = ${b.id}`))
+      const skus = await Promise.all(promise)
+      const promiseTwo = res.map(b => mySqlServer.mySql(`select * from goodsdetails_type where parentId = ${b.id}`))
+      const types = await Promise.all(promiseTwo)
+      const detailsSku = deleteArr(skus)
+      const detailsType = deleteArr(types)
+      res.forEach(item => {
+        item['skus'] = []
+        item['types'] = []
+        detailsSku.forEach((sku, index) => {
+          sku.forEach(it => {
+            if (item.id == it.parentId) {
+              item.skus.push(it)
+            }
+          })
+        })
+        detailsType.forEach(type => {
+          type.forEach(it => {
+            if (item.id == it.parentId) {
+              item.types.push(it)
+            }
+          })
+        })
+      })
       data.forGoodsList = res
       resolve(res)
     }
@@ -102,4 +126,13 @@ exports.goodsList = async (ctx, next) => {
   } else {
     ctx.fail('失败', -1)
   }
+}
+
+function deleteArr(list) {
+  list.forEach((item, index) => {
+    if (item.length === 0) {
+      list.splice(index, 1)
+    }
+  })
+  return list
 }

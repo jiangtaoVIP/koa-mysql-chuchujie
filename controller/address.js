@@ -24,7 +24,7 @@ exports.add = async (ctx, next) => {
     const sql = `insert into shop_address (parentId,name,phone,province,city,county,addressDetail,areaCode) values (?,?,?,?,?,?,?,?)`
     const res = await mySqlServer.mySql(sql, params)
     if (res) {
-      ctx.success('', '成功')
+      ctx.success({id: res.insertId}, '成功')
     } else {
       ctx.fail('失败', -1)
     }

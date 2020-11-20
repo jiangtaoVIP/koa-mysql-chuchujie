@@ -107,6 +107,11 @@ router.post('/add', address.add)
  *         in: formData
  *         required: true
  *         type: string
+*       - name: isDefault
+ *         description: 是否为默认地址
+ *         in: formData
+ *         required: true
+ *         type: bool
  *     responses:
  *       0:
  *         description: 成功
