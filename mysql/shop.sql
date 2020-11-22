@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3301
  Source Server Type    : MySQL
- Source Server Version : 80012
+ Source Server Version : 50726
  Source Host           : localhost:3301
  Source Schema         : shop
 
  Target Server Type    : MySQL
- Target Server Version : 80012
+ Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 19/11/2020 18:38:59
+ Date: 23/11/2020 00:39:41
 */
 
 SET NAMES utf8mb4;
@@ -84,14 +84,14 @@ CREATE TABLE `file`  (
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件格式',
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '文件创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 10015 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 10003 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of file
 -- ----------------------------
-INSERT INTO `file` VALUES (10014, '18809.jpg', '113066', 'jpg', '2020-11-11 09:54:02');
-INSERT INTO `file` VALUES (10013, 'aaaa.jpg', '241027', 'jpg', '2020-11-10 16:20:52');
-INSERT INTO `file` VALUES (10012, 'aaaa.jpg', '241027', 'jpg', '2020-11-10 16:02:45');
+INSERT INTO `file` VALUES (10001, '微信图片_20201112222822.jpg', '53497', 'jpg', '2020-11-22 15:20:03');
+INSERT INTO `file` VALUES (10000, '微信图片_20201112222822.jpg', '53497', 'jpg', '2020-11-22 12:16:22');
+INSERT INTO `file` VALUES (10002, '微信图片_20201112222822.jpg', '53497', 'jpg', '2020-11-22 16:01:12');
 
 -- ----------------------------
 -- Table structure for goodsdetails
@@ -108,17 +108,24 @@ CREATE TABLE `goodsdetails`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goodsdetails
 -- ----------------------------
 INSERT INTO `goodsdetails` VALUES (1, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', 'https://s10.mogucdn.com/mlcdn/c45406/180821_1bb8lfgjie5e5fl2e1j4il29jl5ch_160x160.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', '火热爆款', '2020-11-15 01:06:29', '2020-11-15 18:19:28');
-INSERT INTO `goodsdetails` VALUES (2, 1, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮', 'https://s10.mogucdn.com/mlcdn/c45406/180821_1bb8lfgjie5e5fl2e1j4il29jl5ch_160x160.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', '新品上新', '2020-11-15 01:36:19', '2020-11-15 18:19:11');
+INSERT INTO `goodsdetails` VALUES (2, 1, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮嘎嘎嘎嘎嘎过过过过过过过过过过过过过过', 'https://s10.mogucdn.com/mlcdn/c45406/180821_1bb8lfgjie5e5fl2e1j4il29jl5ch_160x160.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg', '新品上新', '2020-11-15 01:36:19', '2020-11-21 02:03:14');
 INSERT INTO `goodsdetails` VALUES (3, 2, 'dssdsdsd', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:31', '2020-11-15 18:19:11');
 INSERT INTO `goodsdetails` VALUES (4, 3, 'fsfsff', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:39', '2020-11-15 18:19:10');
 INSERT INTO `goodsdetails` VALUES (5, 1, 'dsffa', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:43', '2020-11-15 18:18:53');
 INSERT INTO `goodsdetails` VALUES (6, 4, 'dsddd', NULL, NULL, NULL, '新品上新', '2020-11-15 13:42:55', '2020-11-15 18:18:52');
+INSERT INTO `goodsdetails` VALUES (7, 2, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '王者审判', '2020-11-22 00:32:07', '2020-11-22 00:32:20');
+INSERT INTO `goodsdetails` VALUES (8, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '颠三倒四', '2020-11-22 00:32:27', '2020-11-22 00:32:27');
+INSERT INTO `goodsdetails` VALUES (9, 2, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '三生三世', '2020-11-22 00:32:34', '2020-11-22 00:32:34');
+INSERT INTO `goodsdetails` VALUES (10, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '颠三倒四', '2020-11-22 00:34:02', '2020-11-22 00:34:02');
+INSERT INTO `goodsdetails` VALUES (11, 4, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '都是对的', '2020-11-22 00:34:12', '2020-11-22 00:34:12');
+INSERT INTO `goodsdetails` VALUES (12, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '颠三倒四', '2020-11-22 00:34:23', '2020-11-22 00:34:23');
+INSERT INTO `goodsdetails` VALUES (13, 6, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', NULL, NULL, NULL, '风风光光', '2020-11-22 00:34:33', '2020-11-22 00:34:33');
 
 -- ----------------------------
 -- Table structure for goodsdetails_sku
@@ -197,13 +204,14 @@ CREATE TABLE `shop_address`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`, `parentId`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shop_address
 -- ----------------------------
-INSERT INTO `shop_address` VALUES (1, 1, '江涛', '18899796648', '广东省', '广州市', '天河区', '车陂此前大街', '517400', 1, '2020-11-14 00:19:55', '2020-11-19 18:17:33');
+INSERT INTO `shop_address` VALUES (1, 1, '江涛', '18899796648', '广东省', '广州市', '天河区', '车陂此前大街', '517400', 0, '2020-11-14 00:19:55', '2020-11-20 00:07:50');
 INSERT INTO `shop_address` VALUES (4, 2, 'sa', NULL, NULL, NULL, NULL, NULL, NULL, 0, '2020-11-14 01:05:13', '2020-11-18 10:29:12');
+INSERT INTO `shop_address` VALUES (5, 1, '黄11', '12212121212', '广东省', '广州市', '天河区', '车陂此前大街', '517400', 1, '2020-11-20 00:05:49', '2020-11-20 00:07:50');
 
 -- ----------------------------
 -- Table structure for user
@@ -211,13 +219,13 @@ INSERT INTO `shop_address` VALUES (4, 2, 'sa', NULL, NULL, NULL, NULL, NULL, NUL
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `userId` int(255) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `userName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名称（登录账号）',
+  `userName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号（登录账号）',
   `sex` enum('M','W') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '城市地址',
-  `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像地址',
+  `birthday` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生日时间戳',
+  `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '个性签名',
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建地址',
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`userId`) USING BTREE
@@ -226,27 +234,27 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '18899796648', 'M', '123456', '18899796648', '洒水多', '阿斯达', NULL, NULL, '2020-10-31 16:29:58');
-INSERT INTO `user` VALUES (2, '2', NULL, NULL, '2', NULL, NULL, NULL, NULL, '2020-11-03 10:03:29');
-INSERT INTO `user` VALUES (3, '2', NULL, NULL, '1', NULL, NULL, NULL, NULL, '2020-11-03 10:58:15');
-INSERT INTO `user` VALUES (4, '2', NULL, NULL, '2', NULL, NULL, NULL, NULL, '2020-11-03 10:03:31');
-INSERT INTO `user` VALUES (5, '21', NULL, NULL, '1', NULL, NULL, NULL, NULL, '2020-11-03 10:58:58');
-INSERT INTO `user` VALUES (6, '是多少', NULL, NULL, '2', NULL, NULL, NULL, NULL, '2020-11-03 10:11:22');
-INSERT INTO `user` VALUES (7, '12', NULL, NULL, '1', NULL, NULL, NULL, NULL, '2020-11-03 10:58:59');
-INSERT INTO `user` VALUES (8, '2', NULL, NULL, '2', NULL, NULL, NULL, NULL, '2020-11-03 10:59:00');
-INSERT INTO `user` VALUES (9, '1', NULL, NULL, '2', NULL, NULL, NULL, NULL, '2020-11-03 10:59:00');
-INSERT INTO `user` VALUES (10, '是多少', NULL, NULL, '1', 'hghh', NULL, NULL, NULL, '2020-11-03 10:59:01');
-INSERT INTO `user` VALUES (11, '12', NULL, NULL, '21', NULL, NULL, NULL, NULL, '2020-11-03 10:59:02');
-INSERT INTO `user` VALUES (12, '212', NULL, NULL, '212', NULL, NULL, NULL, NULL, '2020-11-03 10:59:03');
-INSERT INTO `user` VALUES (13, '多福多寿', NULL, NULL, '21', NULL, NULL, NULL, NULL, '2020-11-03 10:59:04');
-INSERT INTO `user` VALUES (14, '发的发生', NULL, NULL, '21', NULL, NULL, NULL, NULL, '2020-11-03 10:59:05');
-INSERT INTO `user` VALUES (15, 'ewewe', NULL, NULL, '21', NULL, NULL, NULL, '2020-10-31 16:27:24', '2020-11-03 10:59:06');
-INSERT INTO `user` VALUES (16, '放松放松', NULL, NULL, '1', NULL, NULL, NULL, '2020-11-02 17:07:24', '2020-11-03 10:59:06');
-INSERT INTO `user` VALUES (17, '任务分为', NULL, NULL, '21', NULL, NULL, NULL, '2020-11-02 17:07:27', '2020-11-03 10:59:07');
-INSERT INTO `user` VALUES (18, '放松放松', NULL, NULL, '21', NULL, NULL, NULL, '2020-11-02 17:07:28', '2020-11-03 10:59:08');
-INSERT INTO `user` VALUES (19, '2', NULL, NULL, '21', NULL, NULL, NULL, '2020-11-02 17:07:29', '2020-11-03 10:59:09');
-INSERT INTO `user` VALUES (20, '2', NULL, NULL, '21', NULL, NULL, NULL, '2020-11-02 17:07:30', '2020-11-03 10:59:09');
-INSERT INTO `user` VALUES (21, '放松放松', NULL, NULL, '21', NULL, NULL, NULL, '2020-11-02 17:07:32', '2020-11-03 10:59:10');
-INSERT INTO `user` VALUES (22, '分为服务费', NULL, NULL, '21', NULL, NULL, NULL, '2020-11-02 17:07:33', '2020-11-03 10:59:12');
+INSERT INTO `user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10002', NULL, NULL, NULL, '2020-11-23 00:22:59');
+INSERT INTO `user` VALUES (2, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:08');
+INSERT INTO `user` VALUES (3, '2', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:09');
+INSERT INTO `user` VALUES (4, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:10');
+INSERT INTO `user` VALUES (5, '21', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:11');
+INSERT INTO `user` VALUES (6, '是多少', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:12');
+INSERT INTO `user` VALUES (7, '12', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:13');
+INSERT INTO `user` VALUES (8, '2', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
+INSERT INTO `user` VALUES (9, '1', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
+INSERT INTO `user` VALUES (10, '是多少', '1', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:01');
+INSERT INTO `user` VALUES (11, '12', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:02');
+INSERT INTO `user` VALUES (12, '212', '212', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:03');
+INSERT INTO `user` VALUES (13, '多福多寿', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:04');
+INSERT INTO `user` VALUES (14, '发的发生', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:05');
+INSERT INTO `user` VALUES (15, 'ewewe', '21', NULL, NULL, NULL, NULL, NULL, '2020-10-31 16:27:24', '2020-11-03 10:59:06');
+INSERT INTO `user` VALUES (16, '放松放松', '1', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:24', '2020-11-03 10:59:06');
+INSERT INTO `user` VALUES (17, '任务分为', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:27', '2020-11-03 10:59:07');
+INSERT INTO `user` VALUES (18, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:28', '2020-11-03 10:59:08');
+INSERT INTO `user` VALUES (19, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:29', '2020-11-03 10:59:09');
+INSERT INTO `user` VALUES (20, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:30', '2020-11-03 10:59:09');
+INSERT INTO `user` VALUES (21, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:32', '2020-11-03 10:59:10');
+INSERT INTO `user` VALUES (22, '分为服务费', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:33', '2020-11-03 10:59:12');
 
 SET FOREIGN_KEY_CHECKS = 1;

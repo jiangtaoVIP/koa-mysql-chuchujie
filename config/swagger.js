@@ -1,13 +1,15 @@
 const router = require('koa-router')(); // 引入路由函数
 const path = require('path');
 const swaggerJSDoc = require('swagger-jsdoc');
+require('dotenv').config()
+const { DB_HOST, DB_PORT } = process.env
 const swaggerDefinition = {
   info: {
     title: '楚楚街api接口',
     version: '1.0.0',
     description: 'API'
   },
-  host: 'localhost:3000',
+  host: `${DB_HOST}:${DB_PORT}`,
   basePath: '/' // Base path (optional)
 };
 const options = {
@@ -21,6 +23,5 @@ router.get('/swagger.json', async ctx => {
   ctx.set('Content-Type', 'application/json');
   ctx.body = swaggerSpec;
 });
-
 module.exports = router;
 // 将页面暴露出去

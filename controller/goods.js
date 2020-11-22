@@ -1,7 +1,6 @@
 const mySqlServer = require("../mysql/index.js")
 // 获取商品一级分类
 exports.categoryOne = async(ctx, next) => {
-  await next()
   const sql = `select * from category_one`
   const res = await mySqlServer.mySql(sql)
   if (res) {

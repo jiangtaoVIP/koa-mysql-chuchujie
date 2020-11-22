@@ -5,7 +5,7 @@ router.prefix('/goods')
 /**
  * @swagger
  * /goods/categoryOne:
- *   post:
+ *   get:
  *     description: 获取商品一级分类
  *     tags: [商品模块]
  *     responses:

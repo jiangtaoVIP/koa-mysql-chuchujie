@@ -1,5 +1,7 @@
 const mySqlServer = require("../mysql/index.js")
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const { DB_HOST, DB_PORT } = process.env
 exports.getList = async (ctx, next) => {
   /*
   获取用户列表
@@ -49,8 +51,8 @@ exports.login = async (ctx, next) => {
   password = 密码（必填）
   captcha = 验证码（必填）
   */
- const { userName, password, captcha } = ctx.request.body
- if (!userName || !password) {
+ const { phone, password, captcha } = ctx.request.body
+ if (!phone || !password) {
   ctx.fail('参数错误', -1)
   return
  }
@@ -59,9 +61,9 @@ exports.login = async (ctx, next) => {
 //    ctx.fail('验证码有误', -1)
 //    return
 //  }
- const sql = `select * from user where userName = ${userName} and password = ${password}`
+ const sql = `select * from user where phone = ${phone} and password = ${password}`
  const res = await mySqlServer.mySql(sql)
- if (res.length === 1 && userName == res[0].userName && password == res[0].password) {
+ if (res.length === 1 && phone == res[0].phone && password == res[0].password) {
    const token = jwt.sign({
      name: res[0].userName,
      id: res[0].userId
@@ -79,7 +81,7 @@ exports.register = async (ctx, next) => {
   password = 密码（必填）
   */
   const data = ctx.request.body
-  if (!data.userName || !data.password) {
+  if (!data.phone || !data.password) {
     ctx.fail('参数错误', -1)
     return
   }
@@ -107,10 +109,28 @@ exports.getInfo = async (ctx) => {
       ids = -1
     }
   })
-  if (ids != -1) {
+  const userDetails = new Promise(async(resolve, reject) => {
     const sql = `select * from user where userId=${ids}`
     const res = await mySqlServer.mySql(sql)
-    ctx.success(res[0], '成功')
+    if (res && res.length > 0) {
+      if (res[0].avatar != null) {
+        const fileSql = `select * from file where id=${res[0].avatar}`
+        mySqlServer.mySql(fileSql).then(result => {
+          if (result) {
+            res[0].avatar = `http://${DB_HOST}:${DB_PORT}/upload/image/${result[0].id}.${result[0].type}`
+            resolve(res[0])
+          }
+        })
+      } else {
+        resolve(res[0])
+      }
+    } else {
+      reject(-1)
+    }
+  })
+  const res = await userDetails
+  if (res != -1) {
+    ctx.success(res, '成功')
   } else {
     ctx.fail('失败', -1)
   }

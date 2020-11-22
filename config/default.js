@@ -1,9 +1,11 @@
+require('dotenv').config()
+const { DB_HOST, DB_PORT } = process.env
 const config = {
   // 启动端口
-  port: 3000,
+  port: DB_PORT,
   // 数据库配置
   dataBase: {
-    host: "localhost",
+    host: DB_HOST,
     user: "root",
     password: "root",
     database: "shop",

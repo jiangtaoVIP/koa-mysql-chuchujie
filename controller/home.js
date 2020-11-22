@@ -114,8 +114,33 @@ exports.goodsList = async (ctx, next) => {
     // 按最新时间 分页查询
     const sql = `select * from goodsdetails order by createTime desc limit ${(page-1)*size},${size}`
     const res = await mySqlServer.mySql(sql)
-    console.log(res)
-    body.list = res // 数据
+    if (res && res.length > 0) {
+      const promise = res.map(b => mySqlServer.mySql(`select * from goodsdetails_sku where parentId = ${b.id}`))
+      const skus = await Promise.all(promise)
+      const promiseTwo = res.map(b => mySqlServer.mySql(`select * from goodsdetails_type where parentId = ${b.id}`))
+      const types = await Promise.all(promiseTwo)
+      const detailsSku = deleteArr(skus)
+      const detailsType = deleteArr(types)
+      res.forEach(item => {
+        item['skus'] = []
+        item['types'] = []
+        detailsSku.forEach((sku, index) => {
+          sku.forEach(it => {
+            if (item.id == it.parentId) {
+              item.skus.push(it)
+            }
+          })
+        })
+        detailsType.forEach(type => {
+          type.forEach(it => {
+            if (item.id == it.parentId) {
+              item.types.push(it)
+            }
+          })
+        })
+      })
+      body.list = res // 数据
+    }
     body.page = parseInt(page) // 页码
     body.size = parseInt(size) // 页数
     resolve()
