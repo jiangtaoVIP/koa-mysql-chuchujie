@@ -81,7 +81,7 @@ app.use(async (ctx, next) => {
 app.use((ctx, next) => {
   return next().catch((err) => {
       if(err.status === 401){
-          ctx.status = 401
+          ctx.status = 200
           ctx.fail('未登陆', -1);
       }else{
           throw err
