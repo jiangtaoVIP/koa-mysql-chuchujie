@@ -106,4 +106,25 @@ router.post('/register', user.register)
  */
 // #endregion
 router.get('/getInfo', user.getInfo)
+// #region
+/**
+ * @swagger
+ * /user/modify:
+ *   post:
+ *     description: 修改用户信息
+ *     tags: [用户模块]
+ *     produces:
+ *       - application/x-www-form-urlencoded
+ *     parameters:
+ *       - name: data
+ *         description: 用户信息（传什么修改什么）
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/modify', user.modify)
 module.exports = router

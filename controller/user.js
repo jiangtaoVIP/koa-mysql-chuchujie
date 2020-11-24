@@ -135,3 +135,47 @@ exports.getInfo = async (ctx) => {
     ctx.fail('失败', -1)
   }
 }
+exports.modify = async(ctx) => {
+  // 组装数据
+  const data = ctx.request.body
+  const body = {
+    userName: data.userName ? data.userName : null,
+    phone: data.phone ? data.phone : null,
+    sex: data.sex ? data.sex : null,
+    birthday: data.birthday ? data.birthday : null,
+    desc: data.desc ? data.desc : null,
+    password: data.password ? data.password : null,
+  }
+  let mySqlString = []
+  for (const prop in body) {
+    if (body[prop] === null) {
+      delete body[prop]
+    }
+  }
+  for(const prop in body) {
+    mySqlString.push(`${prop}='${body[prop]}'`)
+  }
+  mySqlString = mySqlString.join(',')
+  // end
+  let ids = -1
+  const token = ctx.request.header.authorization.substring(7)
+  if (!token || token == '') {
+    ctx.fail('失败', -1)
+    return
+  }
+  jwt.verify(token, 'my_token', (err, authData) => {
+    if (!err) {
+      ids = authData.id
+    } else {
+      ids = -1
+    }
+  })
+  console.log(mySqlString)
+  const sql = `update user set ${mySqlString} where userId = ${ids}`
+  const res = await mySqlServer.mySql(sql)
+  if (res) {
+    ctx.success('', '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+}

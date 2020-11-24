@@ -99,6 +99,7 @@ exports.image = async (ctx, next) => {
         // 可读流通过管道写入可写流
         reader.pipe(upStream)
         // 重命名
+        console.log(filePath, dirnameImage + `/${res.insertId}.${fileType}`)
         fs.renameSync(filePath, dirnameImage + `/${res.insertId}.${fileType}`)
         resolve({
           id: res.insertId,
