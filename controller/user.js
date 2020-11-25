@@ -143,7 +143,7 @@ exports.modify = async(ctx) => {
     phone: data.phone ? data.phone : null,
     sex: data.sex ? data.sex : null,
     birthday: data.birthday ? data.birthday : null,
-    desc: data.desc ? data.desc : null,
+    descText: data.descText ? data.descText : null,
     password: data.password ? data.password : null,
   }
   let mySqlString = []

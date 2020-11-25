@@ -1,4 +1,6 @@
 const mySqlServer = require("../mysql/index.js")
+require('dotenv').config()
+const { DB_HOST, DB_PORT } = process.env
 exports.getData = async (ctx, next) => {
   const data = {
     message: null, // 首页通知
@@ -32,8 +34,19 @@ exports.getData = async (ctx, next) => {
     const sql = `select * from category_two order by rand() limit 6`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
-      data.forCategoryList = res
-      resolve(res)
+      const promise = res.map(v => mySqlServer.mySql(`select * from file where id=${v.icon}`))
+      let all = await Promise.all(promise)
+      if (all.length > 0) {
+        res.forEach(item => {
+          all.forEach(it => {
+            if (item.icon == it[0].id) {
+              item.icon = `http://${DB_HOST}:${DB_PORT}/upload/image/${it[0].id}.${it[0].type}`
+            }
+          })
+        })
+        data.forCategoryList = res
+        resolve(res)
+      }
     }
   })
   const forGoosList = new Promise(async (resolve) => {

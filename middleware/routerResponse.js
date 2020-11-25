@@ -4,8 +4,8 @@ module.exports =  function routerResponse(option={}){
           ctx.type = option.type || 'json'
           ctx.body = {
               code : option.successCode || 0,
-              msg : msg,
-              data : data ? data : undefined
+              data : data ? data : undefined,
+              msg : msg
           }
       }
 
