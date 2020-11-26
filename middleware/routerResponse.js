@@ -3,9 +3,9 @@ module.exports =  function routerResponse(option={}){
       ctx.success = function (data,msg) {
           ctx.type = option.type || 'json'
           ctx.body = {
-              code : option.successCode || 0,
-              data : data ? data : undefined,
-              msg : msg
+            code : option.successCode || 0,
+            msg : msg,
+            data : data ? data : undefined
           }
       }
 
