@@ -109,25 +109,23 @@ exports.goodDetails = async (ctx, next) => {
       const promise = skus.map(it => mySqlServer.mySql(`select * from goodsdetails_sku where k_s = '${it}'`))
       const all = await Promise.all(promise)
       if (all.length > 0) {
-        // all.forEach(async (item) => {
-        //   const types = await mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id}`)
-        //   item[0]['v'] = JSON.parse(JSON.stringify(types))
-        //   body['sku'].push(item[0])
-        // })
-        const promise_two = all.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id}`))
+        const promise_two = all.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id} and parentId='${data.id}'`))
         const all_two = await Promise.all(promise_two)
-        all.forEach(v => {
-          v[0]['v'] = []
-          all_two.forEach(a => {
-            console.log(a[0].skuId, v[0].id)
-            // if (v.id == a[0].skuId) {
-            //   v[0]['v'].push(a[0])
-            //   console.log(v[0], '11111111')
-            // }
+        if (all_two.length > 0) {
+          all.forEach(item => {
+            item[0]['largeImageMode'] = item[0].largeImageMode != 0
+            all_two.forEach(v => {
+              if (item[0].id == v[0].skuId) {
+                item[0]['v'] = v
+                body['sku'].push(item[0])
+              }
+            })
           })
-        })
-        console.log(all, all_two, 'allllllll')
-        resolve()
+          resolve()
+        } else {
+          body['sku'] = []
+          resolve()
+        }
       }
     } else {
       body['sku'] = []
@@ -162,6 +160,9 @@ exports.goodDetails = async (ctx, next) => {
     if (listSQL && listSQL.length > 0) {
       listSQL.forEach(item => {
         for (const prop in item) {
+          // if (prop == 'price') {
+          //   item[prop] = item[prop].toFixed(2)
+          // }
           if (item[prop] === null) {
             delete item[prop]
           }
@@ -177,11 +178,15 @@ exports.goodDetails = async (ctx, next) => {
     if (res.length > 0) {
       res.forEach(item => {
         item['none_sku'] = item.none_sku != 0
+        // item['price'] = item.price.toFixed(2)
       })
     }
     body = Object.assign(body, ...res)
+    console.log(body)
     if (body.sku) {
       await Promise.all([skuPromise(body.sku), listPromise])
+    } else {
+      body['sku'] = []
     }
     ctx.success(body, '成功')
   } else {
