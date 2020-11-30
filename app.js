@@ -30,7 +30,7 @@ const upload = require('./routes/upload')
 const address = require('./routes/address')
 const goods = require('./routes/goods')
 const home = require('./routes/home')
-
+const shopCart = require('./routes/shopCart')
 // error handler
 onerror(app)
 
@@ -137,6 +137,7 @@ app.use(upload.routes(), upload.allowedMethods())
 app.use(address.routes(), address.allowedMethods())
 app.use(goods.routes(), goods.allowedMethods())
 app.use(home.routes(), home.allowedMethods())
+app.use(shopCart.routes(), shopCart.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
