@@ -13,17 +13,19 @@ exports.getList = async(ctx) => {
       let all = await Promise.all(promise)
       let all_two = await Promise.all(promise_two)
       if (all.length > 0 && all_two.length > 0) {
-        let deWeightThree = () => {
-          let map = new Map()
-          for (let item of all) {
-              if (!map.has(item.id)) {
-                  map.set(item.id, item)
+        function deWeight() {
+          for (var i = 0; i < all.length - 1; i++) {
+              for (var j = i + 1; j < all.length; j++) {
+                  if (all[i].id == all[j].id) {
+                    all.splice(j, 1) //因为数组长度减小1，所以直接 j++ 会漏掉一个元素，所以要 j--
+                    j++
+                  }
               }
           }
-          return [...map.values()]
-        }
-        let newArr3 = deWeightThree()
-        console.log(newArr3)
+          return all;
+      }
+      var newArr = deWeight()
+      console.log(newArr)
       }
       resolve()
     })
