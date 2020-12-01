@@ -160,9 +160,6 @@ exports.goodDetails = async (ctx, next) => {
     if (listSQL && listSQL.length > 0) {
       listSQL.forEach(item => {
         for (const prop in item) {
-          // if (prop == 'price') {
-          //   item[prop] = item[prop].toFixed(2)
-          // }
           if (item[prop] === null) {
             delete item[prop]
           }

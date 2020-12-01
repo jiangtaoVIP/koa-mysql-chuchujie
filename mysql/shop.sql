@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 30/11/2020 17:55:41
+ Date: 01/12/2020 18:39:01
 */
 
 SET NAMES utf8mb4;
@@ -325,13 +325,14 @@ CREATE TABLE `shopcart`  (
   `none_sku` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为无规格商品(0 false，1 true)',
   `cart_num` int(11) NOT NULL COMMENT '选择的商品数量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Records of shopcart
 -- ----------------------------
 INSERT INTO `shopcart` VALUES (1, 1, 1, 2, 0, 3);
 INSERT INTO `shopcart` VALUES (2, 1, 1, 3, 0, 4);
+INSERT INTO `shopcart` VALUES (3, 1, 2, 6, 0, 1);
 
 -- ----------------------------
 -- Table structure for user
@@ -354,7 +355,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', NULL, '2020-11-25 15:59:01');
+INSERT INTO `user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', NULL, '2020-12-01 09:43:58');
 INSERT INTO `user` VALUES (2, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:08');
 INSERT INTO `user` VALUES (3, '2', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:09');
 INSERT INTO `user` VALUES (4, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:10');
