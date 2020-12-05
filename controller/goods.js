@@ -103,54 +103,34 @@ exports.goodDetails = async (ctx, next) => {
   // 获取 sku 集合
   function skuPromise(skuList) {
     return new Promise(async(resolve, reject) => {
-    const skus = skuList.split(',').filter(item => item !== '')
-    if (skus.length > 0) {
-      body['sku'] = []
-      const promise = skus.map(it => mySqlServer.mySql(`select * from goodsdetails_sku where k_s = '${it}'`))
-      const all = await Promise.all(promise)
-      if (all.length > 0) {
-        const promise_two = all.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id} and parentId='${data.id}'`))
-        const all_two = await Promise.all(promise_two)
-        if (all_two.length > 0) {
-          all.forEach(item => {
-            item[0]['largeImageMode'] = item[0].largeImageMode != 0
-            all_two.forEach(v => {
-              if (item[0].id == v[0].skuId) {
-                item[0]['v'] = v
-                body['sku'].push(item[0])
-              }
+      const skus = skuList.split(',').filter(item => item !== '')
+      if (skus.length > 0) {
+        body['sku'] = []
+        const promise = skus.map(it => mySqlServer.mySql(`select * from goodsdetails_sku where k_s = '${it}'`))
+        const all = await Promise.all(promise)
+        if (all.length > 0) {
+          const promise_two = all.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id} and parentId='${data.id}'`))
+          const all_two = await Promise.all(promise_two)
+          if (all_two.length > 0) {
+            all.forEach(item => {
+              item[0]['largeImageMode'] = item[0].largeImageMode != 0
+              all_two.forEach(v => {
+                if (item[0].id == v[0].skuId) {
+                  item[0]['v'] = v
+                  body['sku'].push(item[0])
+                }
+              })
             })
-          })
-          resolve()
-        } else {
-          body['sku'] = []
-          resolve()
+            resolve()
+          } else {
+            body['sku'] = []
+            resolve()
+          }
         }
+      } else {
+        body['sku'] = []
+        resolve()
       }
-    } else {
-      body['sku'] = []
-      resolve()
-    }
-    // const skuSQL = await mySqlServer.mySql(`select * from goodsdetails_sku where parentId = ${data.id}`)
-    // if (skuSQL && skuSQL.length > 0) {
-    //   const promise = skuSQL.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item.id}`))
-    //   let all = await Promise.all(promise)
-    //   if (all.length > 0) {
-    //     skuSQL.forEach((item, index) => {
-    //       item['largeImageMode'] = item.largeImageMode != 0
-    //       all.forEach((it, idx) => {
-    //         if (index === idx) {
-    //           item['v'] = it
-    //         }
-    //       })
-    //     })
-    //     body['sku'] = skuSQL
-    //   }
-    //   resolve()
-    // } else {
-    //   body['sku'] = []
-    //   resolve()
-    // }
     })
   }
 
@@ -158,6 +138,7 @@ exports.goodDetails = async (ctx, next) => {
   const listPromise = new Promise(async(resolve, reject) => {
     const listSQL = await mySqlServer.mySql(`select * from goodsdetails_list where parentId = ${data.id}`)
     if (listSQL && listSQL.length > 0) {
+      // 删除为null的字段
       listSQL.forEach(item => {
         for (const prop in item) {
           if (item[prop] === null) {
