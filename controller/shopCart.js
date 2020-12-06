@@ -12,10 +12,10 @@ exports.getList = async(ctx) => {
   function goodsList (arr) {
     return new Promise(async (resolve, reject) => {
       const promise = arr.map(item => mySqlServer.mySql(`select * from goodsdetails where id = ${item.goodsId}`))
-      const promise_two = arr.map(item => mySqlServer.mySql(`select * from goodsdetails_list where id = ${item.listId}`))
+      // const promise_two = arr.map(item => mySqlServer.mySql(`select * from goodsdetails_list where id = ${item.listId}`))
       let all = await Promise.all(promise)
-      let all_two = await Promise.all(promise_two)
-      if (all.length > 0 && all_two.length > 0) {
+      // let all_two = await Promise.all(promise_two)
+      if (all.length > 0) {
         function deWeight() {
           // 数组对象去重
           for (var i = 0; i < all.length - 1; i++) {
@@ -63,6 +63,9 @@ exports.getList = async(ctx) => {
             resolve(skuList)
           }
         }
+      } else {
+        skuList = []
+        resolve(skuList)
       }
     })
   }
@@ -71,21 +74,26 @@ exports.getList = async(ctx) => {
     return new Promise((resolve, reject) => {
       let fag = 0 // 定义的初始循环变量
       // 过滤 转化数组 sku 大类
-      const skus = list.filter(item => {
-        if (item[0].sku) {
-          item[0].sku = item[0].sku.split(',')
-          return item[0].sku != ''
+      // const skus = list.filter(item => {
+      //   if (item[0].sku) {
+      //     item[0].sku = item[0].sku.split(',')
+      //     return item[0].sku != ''
+      //   }
+      // })
+      list.forEach(item => {
+        item[0].sku = item[0].sku.split(',')
+        if (item[0].sku == '' || !item[0].sku) {
+          item[0].sku = item[0].sku.filter(item => item != '')
         }
       })
-      for (let i = 0; i < skus.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         // 6 进行 循环异步 分别获取sku 小类详细信息
-        goodDetails(skus[i][0]).then(res => {
+        goodDetails(list[i][0]).then(res => {
           fag++
-          skus[i][0]['sku'] = res
+          list[i][0]['sku'] = res
           // console.log(skus[i][0], '数据')
-          if (fag === skus.length) {
-            // console.log(skus[i][0])
-            resolve(skus)
+          if (fag === list.length) {
+            resolve(list)
             // console.log('循环完成', skus)
           }
         })
@@ -103,7 +111,10 @@ exports.getList = async(ctx) => {
           list.push(res[0])
           if (fag === arr.length) {
             // 删除为null的字段
-            list.forEach(item => {
+            list.forEach((item, index) => {
+              if (item == undefined) {
+                list.splice(index, 1)
+              }
               for (const prop in item) {
                 if (item[prop] === null) {
                   delete item[prop]
@@ -127,23 +138,35 @@ exports.getList = async(ctx) => {
     const skuList = result[0] ? result[0] : [] // 商品列表 + sku类目
     const listList = result[1] ? result[1] : [] // 商品list列表
     // 组装数据
+    // console.log(skuList, listList)
     if (result !== undefined && result.length > 0) {
       skuList.forEach(item => {
         item[0]['list'] = []
         listList.forEach(it => {
           res.forEach(value => {
+            // 把 shopCart表数据 加入到数量 分别合并到List数据
             if (it.id == value.listId) {
               it['cart_num'] = value.cart_num
             }
           })
+          // 再把List数据合并到 商品列表
           if (item[0].id == it.parentId) {
             item[0]['list'].push(it)
           }
         })
+        // 如果商品 没有规格类目的话 把shopCart 选择的数量 合并到商品列表
+        if (item[0].sku.length <= 0 || item[0].list.length <= 0) {
+          res.forEach(v => {
+            if (v.goodsId == item[0].id) {
+              item[0]['cart_num'] = v.cart_num
+            }
+          })
+        }
       })
       // skuList格式从数组-数组-对象转换为数组-对象 并且合并到总数据 最后返回前端
-      console.log(skuList)
+      // 并且把 none_sku是否为无规格商品(0 false，1 true) 转化为布尔
       skuList.forEach(item => {
+        if (item[0].none_sku) { item[0]['none_sku'] = item[0].none_sku != 0 }
         dataList.push(item[0])
       })
       ctx.success(dataList, '成功')

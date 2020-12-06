@@ -5,7 +5,7 @@ router.prefix('/shopCart')
 // #region
 /**
  * @swagger
- * /home/data:
+ * /shopCart/getList:
  *   get:
  *     description: 购物车列表
  *     tags: [购物车模块]
