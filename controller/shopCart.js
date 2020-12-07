@@ -90,7 +90,7 @@ exports.getList = async(ctx) => {
         // 6 进行 循环异步 分别获取sku 小类详细信息
         goodDetails(list[i][0]).then(res => {
           fag++
-          list[i][0]['sku'] = res
+          list[i][0]['skuList'] = res
           // console.log(skus[i][0], '数据')
           if (fag === list.length) {
             resolve(list)
