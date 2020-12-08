@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3301
  Source Server Type    : MySQL
- Source Server Version : 50726
+ Source Server Version : 80012
  Source Host           : localhost:3301
  Source Schema         : shop
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 02/12/2020 00:51:31
+ Date: 08/12/2020 18:28:46
 */
 
 SET NAMES utf8mb4;
@@ -321,21 +321,29 @@ CREATE TABLE `shopcart`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '购物车数据id',
   `userId` int(11) NOT NULL COMMENT '所属用户id',
   `goodsId` int(11) NOT NULL COMMENT '所属商品id',
-  `listId` int(11) NOT NULL COMMENT '规格类目id',
+  `listId` int(11) NULL DEFAULT NULL COMMENT '规格类目id',
   `none_sku` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为无规格商品(0 false，1 true)',
   `cart_num` int(11) NOT NULL COMMENT '选择的商品数量',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updateTime` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Records of shopcart
 -- ----------------------------
-INSERT INTO `shopcart` VALUES (1, 1, 1, 2, 0, 3);
-INSERT INTO `shopcart` VALUES (2, 1, 1, 3, 0, 4);
-INSERT INTO `shopcart` VALUES (3, 1, 2, 6, 0, 1);
-INSERT INTO `shopcart` VALUES (4, 1, 1, 4, 0, 1);
-INSERT INTO `shopcart` VALUES (5, 1, 2, 7, 0, 1);
-INSERT INTO `shopcart` VALUES (6, 1, 3, 8, 0, 1);
+INSERT INTO `shopcart` VALUES (1, 1, 1, 2, 0, 13, '2020-12-08 17:31:09', '2020-12-08 17:32:11');
+INSERT INTO `shopcart` VALUES (2, 1, 1, 3, 0, 4, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (3, 1, 2, 6, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (4, 1, 1, 4, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (5, 1, 2, 7, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (6, 1, 3, 8, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (13, 1, 14, NULL, 1, 11, '2020-12-08 17:31:09', '2020-12-08 17:31:17');
+INSERT INTO `shopcart` VALUES (8, 1, 9, 21, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (9, 1, 1, 5, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (11, 1, 13, 30, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (12, 1, 13, 31, 0, 1, '2020-12-08 17:31:09', NULL);
+INSERT INTO `shopcart` VALUES (14, 1, 12, 29, 0, 1, '2020-12-08 17:37:06', NULL);
 
 -- ----------------------------
 -- Table structure for user

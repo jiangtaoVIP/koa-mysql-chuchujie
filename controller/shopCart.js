@@ -1,7 +1,7 @@
 const jwt = require('../model/tokenFn')
 const mySqlServer = require("../mysql/index.js")
 
-
+// 获取购物车列表
 exports.getList = async(ctx) => {
   const userId = jwt.verify(ctx.header)
   if (!userId || userId == -1) {
@@ -127,8 +127,8 @@ exports.getList = async(ctx) => {
       }
     })
   }
-  // 1先获取 购物车表 该用户加入的数据
-  const res = await mySqlServer.mySql(`select * from shopcart where userId = ${userId}`)
+  // 1先获取 购物车表 该用户加入的数据 (按最新时间排序)
+  const res = await mySqlServer.mySql(`select * from shopcart where userId = ${userId} order by createTime desc`)
   if (res !== undefined && res.length > 0) {
     // 2拿到数据列表 拿取里面的数据 分别进行异步操作 
     const result = await Promise.all([goodsList(res), getCartList(res)])
@@ -173,6 +173,90 @@ exports.getList = async(ctx) => {
     } else {
       ctx.success([], '成功')
     }
+  } else {
+    ctx.fail('失败', -1)
+  }
+}
+
+// 加入购物车
+exports.add = async(ctx) => {
+  const userId = jwt.verify(ctx.header)
+  if (!userId || userId == -1) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const data = ctx.request.body
+  if (!data.goodsId || data.none_sku == undefined || !data.cart_num) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  // 增加购物车方法
+  function insertShopCart() {
+    return new Promise(async (resolve) => {
+      const params = [
+        userId, data.goodsId, data.listId, data.none_sku ? 1 : 0, data.cart_num
+      ]
+      const sql = `insert into shopcart (userId,goodsId,listId,none_sku,cart_num) values (?,?,?,?,?)`
+      const res = await mySqlServer.mySql(sql, params)
+      if (res) {
+        resolve(0)
+      } else {
+        resolve(-1)
+      }
+    })
+  }
+  // 修改购物车 数据方法
+  function updataShopCart(id, num) {
+    return new Promise(async (resolve) => {
+      const updata_sql = `update shopcart set cart_num = cart_num + ${num} where id = ${id}`
+      const updata_res = await mySqlServer.mySql(updata_sql)
+      if (updata_res) {
+        resolve(0)
+      } else {
+        resolve(-1)
+      }
+    })
+  }
+
+  function allList() {
+    return new Promise(async (resolve) => {
+      // 先判断是否有相同商品 如果有直接增加数量
+
+      // 判断是否 无规格商品
+      if (!data.none_sku) {
+        const none_sku_sql = `select * from shopcart where listId = ${data.listId}`
+        const res_none_sku = await mySqlServer.mySql(none_sku_sql)
+        // 查找是否有相同规格商品
+        if (res_none_sku.length > 0) {
+          // 有 修改数量
+          const updata_res = await updataShopCart(res_none_sku[0].id, data.cart_num)
+          resolve(updata_res)
+        } else {
+          // 无 添加
+          const insert_res = await insertShopCart()
+          resolve(insert_res)
+        }
+      } else {
+        // 无规格商品 判断
+        const true_sku_sql = `select * from shopcart where goodsId = ${data.goodsId} and none_sku = 1`
+        const true_sku_res = await mySqlServer.mySql(true_sku_sql)
+        // 查找是否有相同商品
+        if (true_sku_res.length > 0) {
+          // 有 修改数量
+          const updata_res_two = await updataShopCart(true_sku_res[0].id, data.cart_num)
+          resolve(updata_res_two)
+        } else {
+          // 无 添加
+          const insert_res_two = await insertShopCart()
+          resolve(insert_res_two)
+        }
+      }
+    })
+  }
+  // 返回
+  const res = await allList()
+  if (res == 0) {
+    ctx.success('', '成功')
   } else {
     ctx.fail('失败', -1)
   }
