@@ -108,6 +108,9 @@ exports.getList = async(ctx) => {
       for (let i = 0; i< arr.length; i++) {
         mySqlServer.mySql(`select * from goodsdetails_list where id = ${arr[i].listId}`).then(res => {
           fag++
+          // 有规格商品
+          // 在此把shopcart 的id添加进List数据 用于删除
+          res[0]['cartId'] = arr[i].id
           list.push(res[0])
           if (fag === arr.length) {
             // 删除为null的字段
@@ -128,7 +131,8 @@ exports.getList = async(ctx) => {
     })
   }
   // 1先获取 购物车表 该用户加入的数据 (按最新时间排序)
-  const res = await mySqlServer.mySql(`select * from shopcart where userId = ${userId} order by createTime desc`)
+  const res = await mySqlServer.mySql(`select * from shopcart where userId = ${userId} order by updateTime desc`)
+  console.log(res, 'ssssss')
   if (res !== undefined && res.length > 0) {
     // 2拿到数据列表 拿取里面的数据 分别进行异步操作 
     const result = await Promise.all([goodsList(res), getCartList(res)])
@@ -144,7 +148,8 @@ exports.getList = async(ctx) => {
         item[0]['list'] = []
         listList.forEach(it => {
           res.forEach(value => {
-            // 把 shopCart表数据 加入到数量 分别合并到List数据
+            // 无规格商品
+            // 把 shopCart表数据 加入到商品 数量 分别合并到List数据
             if (it.id == value.listId) {
               it['cart_num'] = value.cart_num
             }
@@ -155,10 +160,12 @@ exports.getList = async(ctx) => {
           }
         })
         // 如果商品 没有规格类目的话 把shopCart 选择的数量 合并到商品列表
+        // 在此把shopcart 的id添加进List数据 用于删除
         if (item[0].sku.length <= 0 || item[0].list.length <= 0) {
           res.forEach(v => {
             if (v.goodsId == item[0].id) {
               item[0]['cart_num'] = v.cart_num
+              item[0]['cartId'] = v.id
             }
           })
         }
@@ -166,7 +173,8 @@ exports.getList = async(ctx) => {
       // skuList格式从数组-数组-对象转换为数组-对象 并且合并到总数据 最后返回前端
       // 并且把 none_sku是否为无规格商品(0 false，1 true) 转化为布尔
       skuList.forEach(item => {
-        if (item[0].none_sku) { item[0]['none_sku'] = item[0].none_sku != 0 }
+        console.log(item[0], 'aaaaa')
+        if (item[0].none_sku != undefined) { item[0]['none_sku'] = item[0]['none_sku'] != 0 }
         dataList.push(item[0])
       })
       ctx.success(dataList, '成功')
@@ -174,7 +182,7 @@ exports.getList = async(ctx) => {
       ctx.success([], '成功')
     }
   } else {
-    ctx.fail('失败', -1)
+    ctx.success([], '成功')
   }
 }
 
@@ -220,13 +228,13 @@ exports.add = async(ctx) => {
 
   function allList() {
     return new Promise(async (resolve) => {
-      // 先判断是否有相同商品 如果有直接增加数量
+      // 1先判断是否有相同商品 如果有直接增加数量
 
-      // 判断是否 无规格商品
+      // 2判断是否 无规格商品
       if (!data.none_sku) {
         const none_sku_sql = `select * from shopcart where listId = ${data.listId}`
         const res_none_sku = await mySqlServer.mySql(none_sku_sql)
-        // 查找是否有相同规格商品
+        // 2-1查找是否有相同规格商品
         if (res_none_sku.length > 0) {
           // 有 修改数量
           const updata_res = await updataShopCart(res_none_sku[0].id, data.cart_num)
@@ -237,10 +245,10 @@ exports.add = async(ctx) => {
           resolve(insert_res)
         }
       } else {
-        // 无规格商品 判断
+        // 3无规格商品 判断
         const true_sku_sql = `select * from shopcart where goodsId = ${data.goodsId} and none_sku = 1`
         const true_sku_res = await mySqlServer.mySql(true_sku_sql)
-        // 查找是否有相同商品
+        // 3-1查找是否有相同商品
         if (true_sku_res.length > 0) {
           // 有 修改数量
           const updata_res_two = await updataShopCart(true_sku_res[0].id, data.cart_num)
@@ -259,5 +267,24 @@ exports.add = async(ctx) => {
     ctx.success('', '成功')
   } else {
     ctx.fail('失败', -1)
+  }
+}
+
+// 删除商品购物车
+exports.delete = async (ctx) => {
+  const data = ctx.request.body
+  if (!data.cartIds) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const sql = `delete from shopcart where id in (${data.cartIds})`
+  const res = await mySqlServer.mySql(sql)
+  console.log(res)
+  if (res) {
+    if (res) {
+      ctx.success('', '成功')
+    } else {
+      ctx.fail('失败', -1)
+    }
   }
 }

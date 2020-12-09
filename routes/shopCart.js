@@ -53,4 +53,25 @@ router.get('/getList', shopCart.getList)
  */
 // #endregion
 router.post('/add', shopCart.add)
+// #region
+/**
+ * @swagger
+ * /shopCart/add:
+ *   post:
+ *     description: 加入购物车
+ *     tags: [购物车模块]
+ *     produces:
+ *       - multipart/form-data
+ *     parameters:
+ *       - name: cartIds
+ *         description: 购物车id
+ *         in: formData
+ *         required: true
+ *         type: number
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/delete', shopCart.delete)
 module.exports = router
