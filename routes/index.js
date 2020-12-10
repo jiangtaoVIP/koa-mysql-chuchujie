@@ -12,7 +12,7 @@ router.get('/getInfo', async (ctx, next) => {
   console.log(ctx.request.query, 'ctx')
   let page = ctx.request.query.page
   let size = ctx.request.query.size
-  var sql = `SELECT * FROM user limit ${(1-1)*20},${20};`
+  var sql = `SELECT * FROM shop_user limit ${(1-1)*20},${20};`
   var result = await mySqlServer.mySql(sql)
     if (result) {
         ctx.success(result, '查询成功')

@@ -113,7 +113,7 @@ exports.image = async (ctx, next) => {
   // 写入file表后存入user表 （5）
   function onAvatar(avatarId) {
     return new Promise(async(resolve, reject) => {
-      const avatarSql = `update user set avatar=${avatarId} where userId = ${ids}`
+      const avatarSql = `update shop_user set avatar=${avatarId} where userId = ${ids}`
       const res = await mySqlServer.mySql(avatarSql)
       if (res) {
         resolve(0)

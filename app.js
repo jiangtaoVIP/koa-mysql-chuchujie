@@ -31,6 +31,7 @@ const address = require('./routes/address')
 const goods = require('./routes/goods')
 const home = require('./routes/home')
 const shopCart = require('./routes/shopCart')
+const adminUser = require('./routes/adminUser')
 // error handler
 onerror(app)
 
@@ -138,6 +139,7 @@ app.use(address.routes(), address.allowedMethods())
 app.use(goods.routes(), goods.allowedMethods())
 app.use(home.routes(), home.allowedMethods())
 app.use(shopCart.routes(), shopCart.allowedMethods())
+app.use(adminUser.routes(), adminUser.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)

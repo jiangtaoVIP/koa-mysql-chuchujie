@@ -1,21 +1,43 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost_3301
+ Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80012
+ Source Server Version : 80018
  Source Host           : localhost:3301
  Source Schema         : shop
 
  Target Server Type    : MySQL
- Target Server Version : 80012
+ Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 09/12/2020 14:21:29
+ Date: 10/12/2020 18:35:19
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for admin_user
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_user`;
+CREATE TABLE `admin_user`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商家用户id',
+  `userName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商家店铺名称',
+  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号（登录账号）',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺头像地址',
+  `descText` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺介绍',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of admin_user
+-- ----------------------------
+INSERT INTO `admin_user` VALUES (1, '涛坚持不懈的小店', '18899796648', '123456', '10000', '各种卖，啥都卖', '2020-12-10 10:53:36', '2020-12-10 10:53:36');
+INSERT INTO `admin_user` VALUES (2, '测试2店', '18899796648', '123456', '10000', '发的发的发', '2020-12-10 11:11:49', '2020-12-10 11:12:00');
 
 -- ----------------------------
 -- Table structure for category_one
@@ -112,6 +134,7 @@ DROP TABLE IF EXISTS `goodsdetails`;
 CREATE TABLE `goodsdetails`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品',
   `parentId` int(11) NOT NULL COMMENT '该商品所属的二级分类id',
+  `adminId` int(11) NULL DEFAULT NULL COMMENT '所属店铺id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
   `iconId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品缩略图',
   `homeImageIds` varchar(9999) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品首页轮播',
@@ -130,20 +153,20 @@ CREATE TABLE `goodsdetails`  (
 -- ----------------------------
 -- Records of goodsdetails
 -- ----------------------------
-INSERT INTO `goodsdetails` VALUES (1, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', 'https://gd1.alicdn.com/imgextra/i1/2962257955/O1CN0128dR9njqCuZOkPz_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd1.alicdn.com/imgextra/i1/2962257955/O1CN0128dR9njqCuZOkPz_!!2962257955.jpg,https://gd3.alicdn.com/imgextra/i3/2962257955/TB2If_jnbZnBKNjSZFKXXcGOVXa_!!2962257955.jpg,https://gd3.alicdn.com/imgextra/i3/2962257955/TB2LsYAnfImBKNjSZFlXXc43FXa_!!2962257955.jpg', 'https://img.alicdn.com/imgextra/i3/2962257955/O1CN01xC0HeA28dRGwWsBI5_!!2962257955.jpg,https://img.alicdn.com/imgextra/i1/2962257955/O1CN01pk50d128dRGoky0o8_!!2962257955.jpg,https://img.alicdn.com/imgextra/i1/2962257955/TB2vI7Vm9YTBKNjSZKbXXXJ8pXa_!!2962257955.jpg,https://img.alicdn.com/imgextra/i2/2962257955/O1CN0128dR9rUhU45QqRH_!!2962257955.jpg', '火热爆款', 0, 1000, 20.00, 11.00, 's1,s2', '2020-11-15 01:06:29', '2020-11-29 15:31:42');
-INSERT INTO `goodsdetails` VALUES (2, 1, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮', 'https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg', 'https://gd3.alicdn.com/imgextra/i1/175232085/O1CN01PujZ8L1RGyHiw8C9X_!!175232085.jpg,https://gd3.alicdn.com/imgextra/i3/175232085/O1CN01aae81L1RGyHkhZQ3L_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01Mm0ZFj1RGyHkwBCbT_!!175232085.jpg', 'https://img.alicdn.com/imgextra/i4/175232085/O1CN01NUVNBE1RGyHl8Daen_!!175232085.jpg,https://img.alicdn.com/imgextra/i2/175232085/O1CN0196O5LZ1RGyHeKTsKX_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01MRTADv1RGyHkwD59a_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01lbsaim1RGyHlbFUMg_!!175232085.jpg', '新品上新', 0, 1000, 55.00, 323.00, 's1,s2', '2020-11-15 01:36:19', '2020-11-29 15:31:43');
-INSERT INTO `goodsdetails` VALUES (3, 2, '春秋棒球服男潮牌皮袖棒球衣男士宽松大码休闲毛呢夹克外套潮短款', 'https://gd4.alicdn.com/imgextra/i4/276426711/O1CN01r0xAzj1zRgVFxyKuD_!!276426711.jpg', 'https://gd3.alicdn.com/imgextra/i1/276426711/O1CN01WpaU3g1zRgTL0mrlU_!!276426711.jpg,https://gd4.alicdn.com/imgextra/i4/276426711/O1CN01r0xAzj1zRgVFxyKuD_!!276426711.jpg,https://gd2.alicdn.com/imgextra/i2/276426711/TB2NYZPaFXXXXclXXXXXXXXXXXX_!!276426711.jpg', 'https://img.alicdn.com/imgextra/i3/276426711/O1CN01LdPGnV1zRgYqMqxgI_!!276426711.jpg,https://img.alicdn.com/imgextra/i3/276426711/O1CN011zRgTKcGJQFW0Np_!!276426711.jpg,https://img.alicdn.com/imgextra/i3/276426711/O1CN011zRgSM6cvoXnOus_!!276426711.jpg,https://img.alicdn.com/imgextra/i2/276426711/O1CN01BIZ4sw1zRgTPSUtlv_!!276426711.jpg', '新品上新', 0, 1000, 55.00, 233.00, 's1,s2', '2020-11-15 13:42:31', '2020-11-29 15:31:46');
-INSERT INTO `goodsdetails` VALUES (4, 3, '运动裤男秋冬款宽松休闲长裤束脚裤冬季裤子男生加绒加厚潮牌卫裤', 'https://img.alicdn.com/imgextra/i2/2273198458/O1CN01csq9012CLoY7H4TcB_!!2-item_pic.png_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2273198458/O1CN01ixq9iG2CLoXl4heDH_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i2/2273198458/O1CN01csq9012CLoY7H4TcB_!!2-item_pic.png_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/2273198458/O1CN01Wjxz352CLoXu5cLeh_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01lfl5zb2CLoXqXLicN_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2273198458/O1CN01pVLEDz2CLoXs74VY9_!!2273198458.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01EsGG3P2CLoY1ukQyy_!!2273198458.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01Ipjb4h2CLoYkYNyd9_!!2273198458.jpg,https://img.alicdn.com/imgextra/i1/2273198458/O1CN01SpTM2w2CLoXr3UQN8_!!2273198458.jpg', '新品上新', 0, 1000, 43.00, 3323.00, 's1,s2', '2020-11-15 13:42:39', '2020-11-29 15:31:45');
-INSERT INTO `goodsdetails` VALUES (5, 4, '秋冬季款男士长袖t恤潮流加绒卫衣宽松秋装男生内搭打底衫上衣服', 'https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ivGtM31yl5mgwp432_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/3058416618/O1CN01OsbWkH1yl5mY7JihK_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01H4Twux1yl5mxmQR6h_!!3058416618.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ftAy3c1yl5mqgIpxE_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/3058416618/O1CN01QeVMBh1yl5mknqaUJ_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/3058416618/O1CN01tiZUCB1yl5n9u4l4z_!!3058416618.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ehzjSH1yl5n9u76dW_!!3058416618.jpg,https://img.alicdn.com/imgextra/i3/3058416618/O1CN01OorqRw1yl5n8RHndQ_!!3058416618.jpg', '新品上新', 0, 1000, 323.00, 2332.00, 's1,s2', '2020-11-15 13:42:43', '2020-11-29 15:31:47');
-INSERT INTO `goodsdetails` VALUES (6, 5, '小米电视 4A60英寸4k超高清液晶屏智能平板电视机官方旗舰', 'https://img.alicdn.com/imgextra/i1/1714128138/O1CN01oFXUX029zFojI3FC9_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/1714128138/O1CN018lcSE329zFoZN6kj9_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01oFXUX029zFojI3FC9_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01GSJXUO29zFoSG3hbu_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/1714128138/O1CN01PvPx7I29zFmUek9TZ_!!1714128138.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/1714128138/O1CN01XRTBdu29zFneEOFxW_!!1714128138.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01lCbBQN29zFnZb4rIG_!!1714128138.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01YJUFuw29zFmW0fHVa_!!1714128138.jpg', '4K HDR 智能语音', 0, 1000, 323.00, 2323.00, 's1', '2020-11-15 13:42:55', '2020-11-29 15:31:48');
-INSERT INTO `goodsdetails` VALUES (7, 6, '海尔出品Leader/统帅9kg公斤大容量家用全自动波轮洗衣机@B90M867', 'https://img.alicdn.com/imgextra/i4/470168984/O1CN01pnVUTs2GEitTM3SeB_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i2/470168984/O1CN01u7J4KK2GEisM3bOKr_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i4/470168984/O1CN01pnVUTs2GEitTM3SeB_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/470168984/O1CN01abyVxW2GEikcxk2ks_!!470168984.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/470168984/O1CN01wkxZ7r2GEiqIsr34y_!!470168984.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/470168984/O1CN01qeILOR2GEipxJJORX_!!470168984.jpg,https://img.alicdn.com/imgextra/i2/470168984/O1CN01GD3CDh2GEipypHb4s_!!470168984.jpg,https://img.alicdn.com/imgextra/i2/470168984/O1CN017Xu5uz2GEipp7MlbZ_!!470168984.jpg', '智能模糊 智能双宽', 0, 1000, 32.00, 232.00, 's1', '2020-11-22 00:32:07', '2020-11-29 15:31:49');
-INSERT INTO `goodsdetails` VALUES (8, 7, 'Pandora潘多拉官网蓝色海洋之心ZT0139项链女锁骨链简约气质高级', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/2978217349/O1CN01idGzDu249tKIvHrXI_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/2978217349/O1CN01idGzDu249tKIvHrXI_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i1/2978217349/O1CN01ysgdNG249tJxHV32e_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/2978217349/O1CN01xsogwb249tJyUa9YS_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i1/2978217349/O1CN01Hz4uGW249tJuM0yDl_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2978217349/O1CN01roh32a249tHzusQfX_!!2978217349.jpg,https://img.alicdn.com/imgextra/i3/2978217349/O1CN01MGh2fg249tHzXXH2q_!!2978217349.jpg,https://img.alicdn.com/imgextra/i2/2978217349/O1CN01jry0VU249tI4W67cp_!!2978217349.jpg', '冬季新品 梦幻上市', 0, 1000, 355.00, 323.00, 's1', '2020-11-22 00:32:27', '2020-11-29 15:31:50');
-INSERT INTO `goodsdetails` VALUES (9, 8, 'Pandora潘多拉 Moments经典扣925银手链590723CZ简约设计手串 女', 'https://img.alicdn.com/imgextra/i3/2978217349/O1CN01WsfGzA249tKM9HP1Z_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/2978217349/O1CN01WsfGzA249tKM9HP1Z_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i4/2978217349/TB2mhv_Xc3X61BjSszdXXXoAVXa_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2978217349/O1CN01ItAIeq249tHlupNSQ_!!2978217349.jpg,https://img.alicdn.com/imgextra/i3/2978217349/O1CN01U93Jns249tHgLyJT8_!!2978217349.jpg,https://img.alicdn.com/imgextra/i2/2978217349/O1CN01HazB1i249tHnLtO9s_!!2978217349.jpg', '三生三世  梦幻上市', 0, 1000, 865.00, 23.00, 's1', '2020-11-22 00:32:34', '2020-11-29 15:31:51');
-INSERT INTO `goodsdetails` VALUES (10, 9, '洁丽雅毛巾2条 纯棉洗脸家用成人男女不掉毛柔软全棉吸水加厚面巾', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/494858290/O1CN01OTcp3W2B6s1N0jHnS_!!494858290.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/494858290/O1CN01OTcp3W2B6s1N0jHnS_!!494858290.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/494858290/O1CN01XwEmxV2B6s1HycRoz_!!494858290.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/494858290/O1CN01VVPSyF2B6s1Sg9Jgl_!!494858290.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/494858290/O1CN01ib4SD92B6s1DC7Pmb_!!494858290.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/494858290/O1CN01nv2cen2B6s0V8YKuT_!!494858290.jpg,https://img.alicdn.com/imgextra/i2/494858290/O1CN01bREszu2B6s0iTlhNG_!!494858290.jpg,https://img.alicdn.com/imgextra/i3/494858290/O1CN012uOdKu2B6s0fBFbWh_!!494858290.jpg', '鲁道夫抗菌', 0, 1000, 1245.00, 2323.00, 's1', '2020-11-22 00:34:02', '2020-11-29 15:31:54');
-INSERT INTO `goodsdetails` VALUES (11, 10, '【百草味-全肉零食大礼包1642g】鸭脖子熟食休闲食品充饥夜宵整箱', 'https://img.alicdn.com/imgextra/i3/628189716/O1CN013dzrEb2LdyoEWzwwI_!!628189716.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/628189716/O1CN013dzrEb2LdyoEWzwwI_!!628189716.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i4/628189716/O1CN01wA7TMX2Ldyo82qhex_!!628189716.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i2/628189716/O1CN01grS8n92LdyoCBEm61_!!628189716.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/628189716/O1CN010c9BR12Ldyo8pbrj2_!!628189716.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i2/628189716/O1CN01rzjU8X2Ldyo6vFbyO_!!628189716.jpg,https://img.alicdn.com/imgextra/i1/628189716/O1CN018j4anb2LdyoC4xs5J_!!628189716.jpg,https://img.alicdn.com/imgextra/i3/628189716/O1CN01rrlR2j2LdyoC4wjPP_!!628189716.jpg', '600款零食 一站购', 0, 1000, 125.00, 2323.00, 's3', '2020-11-22 00:34:12', '2020-11-29 15:31:52');
-INSERT INTO `goodsdetails` VALUES (12, 11, 'Apple/苹果 iPhone 12 全网通5G新品智能手机', 'https://img.alicdn.com/imgextra/i3/2616970884/O1CN018YzXhr1IOul5Ty5ma_!!2616970884.png_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2616970884/O1CN01E6n5HM1IOul3E0kqn_!!2-item_pic.png_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/2616970884/O1CN01mEOkmw1IOukhKrj6O_!!2616970884.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2616970884/O1CN01YdHFrQ1IOulBNVvaC_!!2616970884.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2616970884/O1CN01tCqYud1IOukcvFm6l_!!2616970884.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2616970884/O1CN01hKr3KT1IOukZNURoT_!!2616970884.jpg', '正品行货', 0, 1000, 99.99, 2323.00, 's1,s4', '2020-11-22 00:34:23', '2020-11-29 15:31:55');
-INSERT INTO `goodsdetails` VALUES (13, 12, 'FT GUOGE针织连衣裙两件套女2020年新款秋装修身法式温柔风毛衣裙', 'https://img.alicdn.com/imgextra/i1/2459043311/O1CN01dk1Q9B1aKU0GPRZv1_!!2459043311.jpg_400x400.jpg', 'https://img.alicdn.com/imgextra/i1/2459043311/O1CN01dk1Q9B1aKU0GPRZv1_!!2459043311.jpg_400x400.jpg,https://img.alicdn.com/imgextra/i4/2459043311/O1CN01ni7Hsz1aKU0EebtVK_!!2459043311.jpg_400x400.jpg,https://img.alicdn.com/imgextra/i2/2459043311/O1CN01Ev5coy1aKU0EeYjn7_!!2459043311.jpg_400x400.jpg', 'https://img.alicdn.com/imgextra/i1/2459043311/O1CN01vR9tlE1aKU06MAe5J_!!2459043311.jpg,https://img.alicdn.com/imgextra/i3/2459043311/O1CN01QxWXEq1aKU05WnO1x_!!2459043311.jpg,', '潮流穿搭 玩趣互动', 0, 1000, 111.11, 2323.00, 's1,s2', '2020-11-22 00:34:33', '2020-11-29 15:31:56');
-INSERT INTO `goodsdetails` VALUES (14, 13, '传祺GS8 购车抽Dyson戴森HP06空气净化器风扇', 'https://img.alicdn.com/imgextra/i4/2023079849/O1CN01UF3mWC2MctUPTOEee_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2023079849/O1CN01UF3mWC2MctUPTOEee_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01c88VnI2MctUMyt1mV_!!2023079849.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01IFBJK62MctUPBtoqd_!!2023079849.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01lab7A12MctUPBw6Ev_!!2023079849.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i2/2023079849/O1CN01e3JBAz2MctUQOswAb_!!2023079849.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01y3IBsD2MctTYpySGf_!!2023079849.jpg', '新品上新', 1, 1000, 11.10, 2323.00, '', '2020-11-25 11:56:41', '2020-11-29 15:31:59');
+INSERT INTO `goodsdetails` VALUES (1, 1, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', 'https://gd1.alicdn.com/imgextra/i1/2962257955/O1CN0128dR9njqCuZOkPz_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd1.alicdn.com/imgextra/i1/2962257955/O1CN0128dR9njqCuZOkPz_!!2962257955.jpg,https://gd3.alicdn.com/imgextra/i3/2962257955/TB2If_jnbZnBKNjSZFKXXcGOVXa_!!2962257955.jpg,https://gd3.alicdn.com/imgextra/i3/2962257955/TB2LsYAnfImBKNjSZFlXXc43FXa_!!2962257955.jpg', 'https://img.alicdn.com/imgextra/i3/2962257955/O1CN01xC0HeA28dRGwWsBI5_!!2962257955.jpg,https://img.alicdn.com/imgextra/i1/2962257955/O1CN01pk50d128dRGoky0o8_!!2962257955.jpg,https://img.alicdn.com/imgextra/i1/2962257955/TB2vI7Vm9YTBKNjSZKbXXXJ8pXa_!!2962257955.jpg,https://img.alicdn.com/imgextra/i2/2962257955/O1CN0128dR9rUhU45QqRH_!!2962257955.jpg', '火热爆款', 0, 1000, 20.00, 11.00, 's1,s2', '2020-11-15 01:06:29', '2020-12-10 11:11:17');
+INSERT INTO `goodsdetails` VALUES (2, 1, 1, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮', 'https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg', 'https://gd3.alicdn.com/imgextra/i1/175232085/O1CN01PujZ8L1RGyHiw8C9X_!!175232085.jpg,https://gd3.alicdn.com/imgextra/i3/175232085/O1CN01aae81L1RGyHkhZQ3L_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01Mm0ZFj1RGyHkwBCbT_!!175232085.jpg', 'https://img.alicdn.com/imgextra/i4/175232085/O1CN01NUVNBE1RGyHl8Daen_!!175232085.jpg,https://img.alicdn.com/imgextra/i2/175232085/O1CN0196O5LZ1RGyHeKTsKX_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01MRTADv1RGyHkwD59a_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01lbsaim1RGyHlbFUMg_!!175232085.jpg', '新品上新', 0, 1000, 55.00, 323.00, 's1,s2', '2020-11-15 01:36:19', '2020-12-10 11:11:18');
+INSERT INTO `goodsdetails` VALUES (3, 2, 1, '春秋棒球服男潮牌皮袖棒球衣男士宽松大码休闲毛呢夹克外套潮短款', 'https://gd4.alicdn.com/imgextra/i4/276426711/O1CN01r0xAzj1zRgVFxyKuD_!!276426711.jpg', 'https://gd3.alicdn.com/imgextra/i1/276426711/O1CN01WpaU3g1zRgTL0mrlU_!!276426711.jpg,https://gd4.alicdn.com/imgextra/i4/276426711/O1CN01r0xAzj1zRgVFxyKuD_!!276426711.jpg,https://gd2.alicdn.com/imgextra/i2/276426711/TB2NYZPaFXXXXclXXXXXXXXXXXX_!!276426711.jpg', 'https://img.alicdn.com/imgextra/i3/276426711/O1CN01LdPGnV1zRgYqMqxgI_!!276426711.jpg,https://img.alicdn.com/imgextra/i3/276426711/O1CN011zRgTKcGJQFW0Np_!!276426711.jpg,https://img.alicdn.com/imgextra/i3/276426711/O1CN011zRgSM6cvoXnOus_!!276426711.jpg,https://img.alicdn.com/imgextra/i2/276426711/O1CN01BIZ4sw1zRgTPSUtlv_!!276426711.jpg', '新品上新', 0, 1000, 55.00, 233.00, 's1,s2', '2020-11-15 13:42:31', '2020-12-10 11:11:19');
+INSERT INTO `goodsdetails` VALUES (4, 3, 1, '运动裤男秋冬款宽松休闲长裤束脚裤冬季裤子男生加绒加厚潮牌卫裤', 'https://img.alicdn.com/imgextra/i2/2273198458/O1CN01csq9012CLoY7H4TcB_!!2-item_pic.png_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2273198458/O1CN01ixq9iG2CLoXl4heDH_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i2/2273198458/O1CN01csq9012CLoY7H4TcB_!!2-item_pic.png_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/2273198458/O1CN01Wjxz352CLoXu5cLeh_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01lfl5zb2CLoXqXLicN_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2273198458/O1CN01pVLEDz2CLoXs74VY9_!!2273198458.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01EsGG3P2CLoY1ukQyy_!!2273198458.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01Ipjb4h2CLoYkYNyd9_!!2273198458.jpg,https://img.alicdn.com/imgextra/i1/2273198458/O1CN01SpTM2w2CLoXr3UQN8_!!2273198458.jpg', '新品上新', 0, 1000, 43.00, 3323.00, 's1,s2', '2020-11-15 13:42:39', '2020-12-10 11:11:19');
+INSERT INTO `goodsdetails` VALUES (5, 4, 1, '秋冬季款男士长袖t恤潮流加绒卫衣宽松秋装男生内搭打底衫上衣服', 'https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ivGtM31yl5mgwp432_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/3058416618/O1CN01OsbWkH1yl5mY7JihK_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01H4Twux1yl5mxmQR6h_!!3058416618.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ftAy3c1yl5mqgIpxE_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/3058416618/O1CN01QeVMBh1yl5mknqaUJ_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/3058416618/O1CN01tiZUCB1yl5n9u4l4z_!!3058416618.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ehzjSH1yl5n9u76dW_!!3058416618.jpg,https://img.alicdn.com/imgextra/i3/3058416618/O1CN01OorqRw1yl5n8RHndQ_!!3058416618.jpg', '新品上新', 0, 1000, 323.00, 2332.00, 's1,s2', '2020-11-15 13:42:43', '2020-12-10 11:11:20');
+INSERT INTO `goodsdetails` VALUES (6, 5, 1, '小米电视 4A60英寸4k超高清液晶屏智能平板电视机官方旗舰', 'https://img.alicdn.com/imgextra/i1/1714128138/O1CN01oFXUX029zFojI3FC9_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/1714128138/O1CN018lcSE329zFoZN6kj9_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01oFXUX029zFojI3FC9_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01GSJXUO29zFoSG3hbu_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/1714128138/O1CN01PvPx7I29zFmUek9TZ_!!1714128138.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/1714128138/O1CN01XRTBdu29zFneEOFxW_!!1714128138.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01lCbBQN29zFnZb4rIG_!!1714128138.jpg,https://img.alicdn.com/imgextra/i1/1714128138/O1CN01YJUFuw29zFmW0fHVa_!!1714128138.jpg', '4K HDR 智能语音', 0, 1000, 323.00, 2323.00, 's1', '2020-11-15 13:42:55', '2020-12-10 11:11:21');
+INSERT INTO `goodsdetails` VALUES (7, 6, 1, '海尔出品Leader/统帅9kg公斤大容量家用全自动波轮洗衣机@B90M867', 'https://img.alicdn.com/imgextra/i4/470168984/O1CN01pnVUTs2GEitTM3SeB_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i2/470168984/O1CN01u7J4KK2GEisM3bOKr_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i4/470168984/O1CN01pnVUTs2GEitTM3SeB_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/470168984/O1CN01abyVxW2GEikcxk2ks_!!470168984.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/470168984/O1CN01wkxZ7r2GEiqIsr34y_!!470168984.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/470168984/O1CN01qeILOR2GEipxJJORX_!!470168984.jpg,https://img.alicdn.com/imgextra/i2/470168984/O1CN01GD3CDh2GEipypHb4s_!!470168984.jpg,https://img.alicdn.com/imgextra/i2/470168984/O1CN017Xu5uz2GEipp7MlbZ_!!470168984.jpg', '智能模糊 智能双宽', 0, 1000, 32.00, 232.00, 's1', '2020-11-22 00:32:07', '2020-12-10 11:11:22');
+INSERT INTO `goodsdetails` VALUES (8, 7, 1, 'Pandora潘多拉官网蓝色海洋之心ZT0139项链女锁骨链简约气质高级', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/2978217349/O1CN01idGzDu249tKIvHrXI_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/2978217349/O1CN01idGzDu249tKIvHrXI_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i1/2978217349/O1CN01ysgdNG249tJxHV32e_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/2978217349/O1CN01xsogwb249tJyUa9YS_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i1/2978217349/O1CN01Hz4uGW249tJuM0yDl_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2978217349/O1CN01roh32a249tHzusQfX_!!2978217349.jpg,https://img.alicdn.com/imgextra/i3/2978217349/O1CN01MGh2fg249tHzXXH2q_!!2978217349.jpg,https://img.alicdn.com/imgextra/i2/2978217349/O1CN01jry0VU249tI4W67cp_!!2978217349.jpg', '冬季新品 梦幻上市', 0, 1000, 355.00, 323.00, 's1', '2020-11-22 00:32:27', '2020-12-10 11:11:22');
+INSERT INTO `goodsdetails` VALUES (9, 8, 1, 'Pandora潘多拉 Moments经典扣925银手链590723CZ简约设计手串 女', 'https://img.alicdn.com/imgextra/i3/2978217349/O1CN01WsfGzA249tKM9HP1Z_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/2978217349/O1CN01WsfGzA249tKM9HP1Z_!!2978217349.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i4/2978217349/TB2mhv_Xc3X61BjSszdXXXoAVXa_!!2978217349.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2978217349/O1CN01ItAIeq249tHlupNSQ_!!2978217349.jpg,https://img.alicdn.com/imgextra/i3/2978217349/O1CN01U93Jns249tHgLyJT8_!!2978217349.jpg,https://img.alicdn.com/imgextra/i2/2978217349/O1CN01HazB1i249tHnLtO9s_!!2978217349.jpg', '三生三世  梦幻上市', 0, 1000, 865.00, 23.00, 's1', '2020-11-22 00:32:34', '2020-12-10 11:11:23');
+INSERT INTO `goodsdetails` VALUES (10, 9, 1, '洁丽雅毛巾2条 纯棉洗脸家用成人男女不掉毛柔软全棉吸水加厚面巾', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/494858290/O1CN01OTcp3W2B6s1N0jHnS_!!494858290.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/494858290/O1CN01OTcp3W2B6s1N0jHnS_!!494858290.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/494858290/O1CN01XwEmxV2B6s1HycRoz_!!494858290.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/494858290/O1CN01VVPSyF2B6s1Sg9Jgl_!!494858290.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/494858290/O1CN01ib4SD92B6s1DC7Pmb_!!494858290.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/494858290/O1CN01nv2cen2B6s0V8YKuT_!!494858290.jpg,https://img.alicdn.com/imgextra/i2/494858290/O1CN01bREszu2B6s0iTlhNG_!!494858290.jpg,https://img.alicdn.com/imgextra/i3/494858290/O1CN012uOdKu2B6s0fBFbWh_!!494858290.jpg', '鲁道夫抗菌', 0, 1000, 1245.00, 2323.00, 's1', '2020-11-22 00:34:02', '2020-12-10 11:11:24');
+INSERT INTO `goodsdetails` VALUES (11, 10, 1, '【百草味-全肉零食大礼包1642g】鸭脖子熟食休闲食品充饥夜宵整箱', 'https://img.alicdn.com/imgextra/i3/628189716/O1CN013dzrEb2LdyoEWzwwI_!!628189716.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/628189716/O1CN013dzrEb2LdyoEWzwwI_!!628189716.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i4/628189716/O1CN01wA7TMX2Ldyo82qhex_!!628189716.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i2/628189716/O1CN01grS8n92LdyoCBEm61_!!628189716.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/628189716/O1CN010c9BR12Ldyo8pbrj2_!!628189716.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i2/628189716/O1CN01rzjU8X2Ldyo6vFbyO_!!628189716.jpg,https://img.alicdn.com/imgextra/i1/628189716/O1CN018j4anb2LdyoC4xs5J_!!628189716.jpg,https://img.alicdn.com/imgextra/i3/628189716/O1CN01rrlR2j2LdyoC4wjPP_!!628189716.jpg', '600款零食 一站购', 0, 1000, 125.00, 2323.00, 's3', '2020-11-22 00:34:12', '2020-12-10 11:11:25');
+INSERT INTO `goodsdetails` VALUES (12, 11, 1, 'Apple/苹果 iPhone 12 全网通5G新品智能手机', 'https://img.alicdn.com/imgextra/i3/2616970884/O1CN018YzXhr1IOul5Ty5ma_!!2616970884.png_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2616970884/O1CN01E6n5HM1IOul3E0kqn_!!2-item_pic.png_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/2616970884/O1CN01mEOkmw1IOukhKrj6O_!!2616970884.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2616970884/O1CN01YdHFrQ1IOulBNVvaC_!!2616970884.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2616970884/O1CN01tCqYud1IOukcvFm6l_!!2616970884.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2616970884/O1CN01hKr3KT1IOukZNURoT_!!2616970884.jpg', '正品行货', 0, 1000, 99.99, 2323.00, 's1,s4', '2020-11-22 00:34:23', '2020-12-10 11:11:25');
+INSERT INTO `goodsdetails` VALUES (13, 12, 1, 'FT GUOGE针织连衣裙两件套女2020年新款秋装修身法式温柔风毛衣裙', 'https://img.alicdn.com/imgextra/i1/2459043311/O1CN01dk1Q9B1aKU0GPRZv1_!!2459043311.jpg_400x400.jpg', 'https://img.alicdn.com/imgextra/i1/2459043311/O1CN01dk1Q9B1aKU0GPRZv1_!!2459043311.jpg_400x400.jpg,https://img.alicdn.com/imgextra/i4/2459043311/O1CN01ni7Hsz1aKU0EebtVK_!!2459043311.jpg_400x400.jpg,https://img.alicdn.com/imgextra/i2/2459043311/O1CN01Ev5coy1aKU0EeYjn7_!!2459043311.jpg_400x400.jpg', 'https://img.alicdn.com/imgextra/i1/2459043311/O1CN01vR9tlE1aKU06MAe5J_!!2459043311.jpg,https://img.alicdn.com/imgextra/i3/2459043311/O1CN01QxWXEq1aKU05WnO1x_!!2459043311.jpg,', '潮流穿搭 玩趣互动', 0, 1000, 111.11, 2323.00, 's1,s2', '2020-11-22 00:34:33', '2020-12-10 11:11:26');
+INSERT INTO `goodsdetails` VALUES (14, 13, 1, '传祺GS8 购车抽Dyson戴森HP06空气净化器风扇', 'https://img.alicdn.com/imgextra/i4/2023079849/O1CN01UF3mWC2MctUPTOEee_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2023079849/O1CN01UF3mWC2MctUPTOEee_!!0-item_pic.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01c88VnI2MctUMyt1mV_!!2023079849.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01IFBJK62MctUPBtoqd_!!2023079849.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01lab7A12MctUPBw6Ev_!!2023079849.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i2/2023079849/O1CN01e3JBAz2MctUQOswAb_!!2023079849.jpg,https://img.alicdn.com/imgextra/i3/2023079849/O1CN01y3IBsD2MctTYpySGf_!!2023079849.jpg', '新品上新', 1, 1000, 11.10, 2323.00, '', '2020-11-25 11:56:41', '2020-12-10 11:11:28');
 
 -- ----------------------------
 -- Table structure for goodsdetails_list
@@ -314,48 +337,10 @@ CREATE TABLE `shop_address`  (
 INSERT INTO `shop_address` VALUES (4, 2, 'sa', NULL, NULL, NULL, NULL, NULL, NULL, 0, '2020-11-14 01:05:13', '2020-11-18 10:29:12');
 
 -- ----------------------------
--- Table structure for shopcart
+-- Table structure for shop_user
 -- ----------------------------
-DROP TABLE IF EXISTS `shopcart`;
-CREATE TABLE `shopcart`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '购物车数据id',
-  `userId` int(11) NOT NULL COMMENT '所属用户id',
-  `goodsId` int(11) NOT NULL COMMENT '所属商品id',
-  `listId` int(11) NULL DEFAULT NULL COMMENT '规格类目id',
-  `none_sku` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为无规格商品(0 false，1 true)',
-  `cart_num` int(11) NOT NULL COMMENT '选择的商品数量',
-  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
-  `updateTime` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
-
--- ----------------------------
--- Records of shopcart
--- ----------------------------
-INSERT INTO `shopcart` VALUES (29, 1, 4, 13, 0, 2, '2020-12-09 11:13:28', NULL);
-INSERT INTO `shopcart` VALUES (28, 1, 4, 11, 0, 3, '2020-12-09 11:13:24', NULL);
-INSERT INTO `shopcart` VALUES (26, 1, 2, 6, 0, 3, '2020-12-09 11:13:11', NULL);
-INSERT INTO `shopcart` VALUES (24, 1, 1, 3, 0, 6, '2020-12-09 11:13:04', '2020-12-09 11:13:08');
-INSERT INTO `shopcart` VALUES (22, 1, 13, 31, 0, 4, '2020-12-09 11:12:56', '2020-12-09 11:51:16');
-INSERT INTO `shopcart` VALUES (21, 1, 13, 30, 0, 4, '2020-12-09 11:12:55', '2020-12-09 11:51:11');
-INSERT INTO `shopcart` VALUES (17, 1, 3, 8, 0, 4, '2020-12-09 10:59:33', '2020-12-09 11:13:19');
-INSERT INTO `shopcart` VALUES (27, 1, 2, 7, 0, 3, '2020-12-09 11:13:13', NULL);
-INSERT INTO `shopcart` VALUES (19, 1, 4, 12, 0, 6, '2020-12-09 11:11:16', '2020-12-09 11:13:26');
-INSERT INTO `shopcart` VALUES (20, 1, 14, NULL, 1, 3, '2020-12-09 11:12:49', NULL);
-INSERT INTO `shopcart` VALUES (25, 1, 1, 5, 0, 3, '2020-12-09 11:13:06', NULL);
-INSERT INTO `shopcart` VALUES (23, 1, 1, 2, 0, 3, '2020-12-09 11:13:03', NULL);
-INSERT INTO `shopcart` VALUES (30, 1, 5, 9, 0, 1, '2020-12-09 11:13:38', NULL);
-INSERT INTO `shopcart` VALUES (31, 1, 5, 10, 0, 1, '2020-12-09 11:13:40', NULL);
-INSERT INTO `shopcart` VALUES (32, 1, 6, 14, 0, 1, '2020-12-09 11:13:48', NULL);
-INSERT INTO `shopcart` VALUES (33, 1, 6, 15, 0, 1, '2020-12-09 11:13:50', NULL);
-INSERT INTO `shopcart` VALUES (34, 1, 7, 16, 0, 1, '2020-12-09 11:13:58', NULL);
-INSERT INTO `shopcart` VALUES (35, 1, 7, 17, 0, 1, '2020-12-09 11:14:00', NULL);
-
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user`  (
+DROP TABLE IF EXISTS `shop_user`;
+CREATE TABLE `shop_user`  (
   `userId` int(255) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `userName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
   `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号（登录账号）',
@@ -370,29 +355,45 @@ CREATE TABLE `user`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of user
+-- Records of shop_user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', NULL, '2020-12-01 09:43:58');
-INSERT INTO `user` VALUES (2, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:08');
-INSERT INTO `user` VALUES (3, '2', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:09');
-INSERT INTO `user` VALUES (4, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:10');
-INSERT INTO `user` VALUES (5, '21', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:11');
-INSERT INTO `user` VALUES (6, '是多少', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:12');
-INSERT INTO `user` VALUES (7, '12', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:13');
-INSERT INTO `user` VALUES (8, '2', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
-INSERT INTO `user` VALUES (9, '1', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
-INSERT INTO `user` VALUES (10, '是多少', '1', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:01');
-INSERT INTO `user` VALUES (11, '12', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:02');
-INSERT INTO `user` VALUES (12, '212', '212', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:03');
-INSERT INTO `user` VALUES (13, '多福多寿', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:04');
-INSERT INTO `user` VALUES (14, '发的发生', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:05');
-INSERT INTO `user` VALUES (15, 'ewewe', '21', NULL, NULL, NULL, NULL, NULL, '2020-10-31 16:27:24', '2020-11-03 10:59:06');
-INSERT INTO `user` VALUES (16, '放松放松', '1', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:24', '2020-11-03 10:59:06');
-INSERT INTO `user` VALUES (17, '任务分为', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:27', '2020-11-03 10:59:07');
-INSERT INTO `user` VALUES (18, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:28', '2020-11-03 10:59:08');
-INSERT INTO `user` VALUES (19, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:29', '2020-11-03 10:59:09');
-INSERT INTO `user` VALUES (20, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:30', '2020-11-03 10:59:09');
-INSERT INTO `user` VALUES (21, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:32', '2020-11-03 10:59:10');
-INSERT INTO `user` VALUES (22, '分为服务费', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:33', '2020-11-03 10:59:12');
+INSERT INTO `shop_user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', NULL, '2020-12-01 09:43:58');
+INSERT INTO `shop_user` VALUES (2, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:08');
+INSERT INTO `shop_user` VALUES (3, '2', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:09');
+INSERT INTO `shop_user` VALUES (4, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:10');
+INSERT INTO `shop_user` VALUES (5, '21', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:11');
+INSERT INTO `shop_user` VALUES (6, '是多少', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:12');
+INSERT INTO `shop_user` VALUES (7, '12', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:13');
+INSERT INTO `shop_user` VALUES (8, '2', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
+INSERT INTO `shop_user` VALUES (9, '1', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
+INSERT INTO `shop_user` VALUES (10, '是多少', '1', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:01');
+INSERT INTO `shop_user` VALUES (11, '12', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:02');
+INSERT INTO `shop_user` VALUES (12, '212', '212', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:03');
+INSERT INTO `shop_user` VALUES (13, '多福多寿', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:04');
+INSERT INTO `shop_user` VALUES (14, '发的发生', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:05');
+INSERT INTO `shop_user` VALUES (15, 'ewewe', '21', NULL, NULL, NULL, NULL, NULL, '2020-10-31 16:27:24', '2020-11-03 10:59:06');
+INSERT INTO `shop_user` VALUES (16, '放松放松', '1', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:24', '2020-11-03 10:59:06');
+INSERT INTO `shop_user` VALUES (17, '任务分为', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:27', '2020-11-03 10:59:07');
+INSERT INTO `shop_user` VALUES (18, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:28', '2020-11-03 10:59:08');
+INSERT INTO `shop_user` VALUES (19, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:29', '2020-11-03 10:59:09');
+INSERT INTO `shop_user` VALUES (20, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:30', '2020-11-03 10:59:09');
+INSERT INTO `shop_user` VALUES (21, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:32', '2020-11-03 10:59:10');
+INSERT INTO `shop_user` VALUES (22, '分为服务费', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:33', '2020-11-03 10:59:12');
+
+-- ----------------------------
+-- Table structure for shopcart
+-- ----------------------------
+DROP TABLE IF EXISTS `shopcart`;
+CREATE TABLE `shopcart`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '购物车数据id',
+  `userId` int(11) NOT NULL COMMENT '所属用户id',
+  `goodsId` int(11) NOT NULL COMMENT '所属商品id',
+  `listId` int(11) NULL DEFAULT NULL COMMENT '规格类目id',
+  `none_sku` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为无规格商品(0 false，1 true)',
+  `cart_num` int(11) NOT NULL COMMENT '选择的商品数量',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 41 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,7 +1,6 @@
 const mySqlServer = require("../mysql/index.js")
 const jwt = require('jsonwebtoken')
-require('dotenv').config()
-const { DB_HOST, DB_PORT } = process.env
+const { getFile } = require('../model/getfile')
 exports.getList = async (ctx, next) => {
   /*
   获取用户列表
@@ -20,8 +19,8 @@ exports.getList = async (ctx, next) => {
     return
   }
   const sql = [
-    `select count(*) from user where userName like '%${userName}%' and phone like '%${phone}%';`,
-    `select * from user where userName like '%${userName}%' and phone like '%${phone}%' limit ${(page-1)*size},${size};`,
+    `select count(*) from shop_user where userName like '%${userName}%' and phone like '%${phone}%';`,
+    `select * from shop_user where userName like '%${userName}%' and phone like '%${phone}%' limit ${(page-1)*size},${size};`,
   ]
   let result = {}
   const promise = sql.map(b => mySqlServer.mySql(b))
@@ -61,7 +60,7 @@ exports.login = async (ctx, next) => {
 //    ctx.fail('验证码有误', -1)
 //    return
 //  }
- const sql = `select * from user where phone = ${phone} and password = ${password}`
+ const sql = `select * from shop_user where phone = ${phone} and password = ${password}`
  const res = await mySqlServer.mySql(sql)
  if (res.length === 1 && phone == res[0].phone && password == res[0].password) {
    const token = jwt.sign({
@@ -86,7 +85,7 @@ exports.register = async (ctx, next) => {
     return
   }
   const params = [data.userName, data.password, data.sex, data.phone, data.city, data.area, data.avatar]
-  const sql = `insert into user (userName,password,sex,phone,city,area,avatar) values (?,?,?,?,?,?,?)`
+  const sql = `insert into shop_user (userName,password,sex,phone,city,area,avatar) values (?,?,?,?,?,?,?)`
   const res = await mySqlServer.mySql(sql, params)
   if (res) {
     ctx.success('', '成功')
@@ -110,17 +109,13 @@ exports.getInfo = async (ctx) => {
     }
   })
   const userDetails = new Promise(async(resolve, reject) => {
-    const sql = `select * from user where userId=${ids}`
+    const sql = `select * from shop_user where userId=${ids}`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
       if (res[0].avatar != null) {
-        const fileSql = `select * from file where id=${res[0].avatar}`
-        mySqlServer.mySql(fileSql).then(result => {
-          if (result) {
-            res[0].avatar = `http://${DB_HOST}:${DB_PORT}/upload/image/${result[0].id}.${result[0].type}`
-            resolve(res[0])
-          }
-        })
+        // 使用获取文件的方法
+        res[0].avatar = await getFile(res[0].avatar)
+        resolve(res[0])
       } else {
         resolve(res[0])
       }
@@ -171,7 +166,7 @@ exports.modify = async(ctx) => {
     }
   })
   console.log(mySqlString)
-  const sql = `update user set ${mySqlString} where userId = ${ids}`
+  const sql = `update shop_user set ${mySqlString} where userId = ${ids}`
   const res = await mySqlServer.mySql(sql)
   if (res) {
     ctx.success('', '成功')

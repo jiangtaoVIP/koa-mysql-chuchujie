@@ -132,7 +132,6 @@ exports.getList = async(ctx) => {
   }
   // 1先获取 购物车表 该用户加入的数据 (按最新时间排序)
   const res = await mySqlServer.mySql(`select * from shopcart where userId = ${userId} order by updateTime desc`)
-  console.log(res, 'ssssss')
   if (res !== undefined && res.length > 0) {
     // 2拿到数据列表 拿取里面的数据 分别进行异步操作 
     const result = await Promise.all([goodsList(res), getCartList(res)])
@@ -173,7 +172,6 @@ exports.getList = async(ctx) => {
       // skuList格式从数组-数组-对象转换为数组-对象 并且合并到总数据 最后返回前端
       // 并且把 none_sku是否为无规格商品(0 false，1 true) 转化为布尔
       skuList.forEach(item => {
-        console.log(item[0], 'aaaaa')
         if (item[0].none_sku != undefined) { item[0]['none_sku'] = item[0]['none_sku'] != 0 }
         dataList.push(item[0])
       })
