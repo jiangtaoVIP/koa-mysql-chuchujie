@@ -108,9 +108,6 @@ exports.getList = async(ctx) => {
       for (let i = 0; i< arr.length; i++) {
         mySqlServer.mySql(`select * from goodsdetails_list where id = ${arr[i].listId}`).then(res => {
           fag++
-          // 有规格商品
-          // 在此把shopcart 的id添加进List数据 用于删除
-          res[0]['cartId'] = arr[i].id
           list.push(res[0])
           if (fag === arr.length) {
             // 删除为null的字段
@@ -151,6 +148,7 @@ exports.getList = async(ctx) => {
             // 把 shopCart表数据 加入到商品 数量 分别合并到List数据
             if (it.id == value.listId) {
               it['cart_num'] = value.cart_num
+              it['cartId'] = value.id
             }
           })
           // 再把List数据合并到 商品列表

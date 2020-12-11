@@ -11,7 +11,7 @@ router.prefix('/adminUser')
  *     produces:
  *        - application/json
  *     parameters:
- *       - name: id
+ *       - name: adminId
  *         description: 店铺id
  *         in: formData
  *         required: true
