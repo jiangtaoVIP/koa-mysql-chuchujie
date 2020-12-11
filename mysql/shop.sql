@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 10/12/2020 18:35:19
+ Date: 11/12/2020 18:34:44
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `admin_user`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin_user
@@ -154,7 +154,7 @@ CREATE TABLE `goodsdetails`  (
 -- Records of goodsdetails
 -- ----------------------------
 INSERT INTO `goodsdetails` VALUES (1, 1, 1, '易燃青年 长袖撞色拼接休闲夹克男 学生春装宽松翻领上衣外套', 'https://gd1.alicdn.com/imgextra/i1/2962257955/O1CN0128dR9njqCuZOkPz_!!2962257955.jpg', 'https://gd4.alicdn.com/imgextra/i4/2962257955/O1CN0128dR9me80xQJTDB_!!2962257955.jpg,https://gd1.alicdn.com/imgextra/i1/2962257955/O1CN0128dR9njqCuZOkPz_!!2962257955.jpg,https://gd3.alicdn.com/imgextra/i3/2962257955/TB2If_jnbZnBKNjSZFKXXcGOVXa_!!2962257955.jpg,https://gd3.alicdn.com/imgextra/i3/2962257955/TB2LsYAnfImBKNjSZFlXXc43FXa_!!2962257955.jpg', 'https://img.alicdn.com/imgextra/i3/2962257955/O1CN01xC0HeA28dRGwWsBI5_!!2962257955.jpg,https://img.alicdn.com/imgextra/i1/2962257955/O1CN01pk50d128dRGoky0o8_!!2962257955.jpg,https://img.alicdn.com/imgextra/i1/2962257955/TB2vI7Vm9YTBKNjSZKbXXXJ8pXa_!!2962257955.jpg,https://img.alicdn.com/imgextra/i2/2962257955/O1CN0128dR9rUhU45QqRH_!!2962257955.jpg', '火热爆款', 0, 1000, 20.00, 11.00, 's1,s2', '2020-11-15 01:06:29', '2020-12-10 11:11:17');
-INSERT INTO `goodsdetails` VALUES (2, 1, 1, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮', 'https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg', 'https://gd3.alicdn.com/imgextra/i1/175232085/O1CN01PujZ8L1RGyHiw8C9X_!!175232085.jpg,https://gd3.alicdn.com/imgextra/i3/175232085/O1CN01aae81L1RGyHkhZQ3L_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01Mm0ZFj1RGyHkwBCbT_!!175232085.jpg', 'https://img.alicdn.com/imgextra/i4/175232085/O1CN01NUVNBE1RGyHl8Daen_!!175232085.jpg,https://img.alicdn.com/imgextra/i2/175232085/O1CN0196O5LZ1RGyHeKTsKX_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01MRTADv1RGyHkwD59a_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01lbsaim1RGyHlbFUMg_!!175232085.jpg', '新品上新', 0, 1000, 55.00, 323.00, 's1,s2', '2020-11-15 01:36:19', '2020-12-10 11:11:18');
+INSERT INTO `goodsdetails` VALUES (2, 1, 2, '原宿ulzzang羊羔毛加厚棉衣外套男冬季宽松韩版棉袄青少年棉服潮', 'https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg', 'https://gd3.alicdn.com/imgextra/i1/175232085/O1CN01PujZ8L1RGyHiw8C9X_!!175232085.jpg,https://gd3.alicdn.com/imgextra/i3/175232085/O1CN01aae81L1RGyHkhZQ3L_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01GILwHx1RGyHjMHMMR_!!175232085.jpg,https://gd2.alicdn.com/imgextra/i2/175232085/O1CN01Mm0ZFj1RGyHkwBCbT_!!175232085.jpg', 'https://img.alicdn.com/imgextra/i4/175232085/O1CN01NUVNBE1RGyHl8Daen_!!175232085.jpg,https://img.alicdn.com/imgextra/i2/175232085/O1CN0196O5LZ1RGyHeKTsKX_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01MRTADv1RGyHkwD59a_!!175232085.jpg,https://img.alicdn.com/imgextra/i1/175232085/O1CN01lbsaim1RGyHlbFUMg_!!175232085.jpg', '新品上新', 0, 1000, 55.00, 323.00, 's1,s2', '2020-11-15 01:36:19', '2020-12-11 10:30:36');
 INSERT INTO `goodsdetails` VALUES (3, 2, 1, '春秋棒球服男潮牌皮袖棒球衣男士宽松大码休闲毛呢夹克外套潮短款', 'https://gd4.alicdn.com/imgextra/i4/276426711/O1CN01r0xAzj1zRgVFxyKuD_!!276426711.jpg', 'https://gd3.alicdn.com/imgextra/i1/276426711/O1CN01WpaU3g1zRgTL0mrlU_!!276426711.jpg,https://gd4.alicdn.com/imgextra/i4/276426711/O1CN01r0xAzj1zRgVFxyKuD_!!276426711.jpg,https://gd2.alicdn.com/imgextra/i2/276426711/TB2NYZPaFXXXXclXXXXXXXXXXXX_!!276426711.jpg', 'https://img.alicdn.com/imgextra/i3/276426711/O1CN01LdPGnV1zRgYqMqxgI_!!276426711.jpg,https://img.alicdn.com/imgextra/i3/276426711/O1CN011zRgTKcGJQFW0Np_!!276426711.jpg,https://img.alicdn.com/imgextra/i3/276426711/O1CN011zRgSM6cvoXnOus_!!276426711.jpg,https://img.alicdn.com/imgextra/i2/276426711/O1CN01BIZ4sw1zRgTPSUtlv_!!276426711.jpg', '新品上新', 0, 1000, 55.00, 233.00, 's1,s2', '2020-11-15 13:42:31', '2020-12-10 11:11:19');
 INSERT INTO `goodsdetails` VALUES (4, 3, 1, '运动裤男秋冬款宽松休闲长裤束脚裤冬季裤子男生加绒加厚潮牌卫裤', 'https://img.alicdn.com/imgextra/i2/2273198458/O1CN01csq9012CLoY7H4TcB_!!2-item_pic.png_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i1/2273198458/O1CN01ixq9iG2CLoXl4heDH_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i2/2273198458/O1CN01csq9012CLoY7H4TcB_!!2-item_pic.png_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/2273198458/O1CN01Wjxz352CLoXu5cLeh_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01lfl5zb2CLoXqXLicN_!!2273198458-0-lubanu-s.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/2273198458/O1CN01pVLEDz2CLoXs74VY9_!!2273198458.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01EsGG3P2CLoY1ukQyy_!!2273198458.jpg,https://img.alicdn.com/imgextra/i3/2273198458/O1CN01Ipjb4h2CLoYkYNyd9_!!2273198458.jpg,https://img.alicdn.com/imgextra/i1/2273198458/O1CN01SpTM2w2CLoXr3UQN8_!!2273198458.jpg', '新品上新', 0, 1000, 43.00, 3323.00, 's1,s2', '2020-11-15 13:42:39', '2020-12-10 11:11:19');
 INSERT INTO `goodsdetails` VALUES (5, 4, 1, '秋冬季款男士长袖t恤潮流加绒卫衣宽松秋装男生内搭打底衫上衣服', 'https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ivGtM31yl5mgwp432_!!0-item_pic.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i3/3058416618/O1CN01OsbWkH1yl5mY7JihK_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01H4Twux1yl5mxmQR6h_!!3058416618.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ftAy3c1yl5mqgIpxE_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg,https://img.alicdn.com/imgextra/i3/3058416618/O1CN01QeVMBh1yl5mknqaUJ_!!3058416618-0-lubanu-s.jpg_430x430q90.jpg', 'https://img.alicdn.com/imgextra/i4/3058416618/O1CN01tiZUCB1yl5n9u4l4z_!!3058416618.jpg,https://img.alicdn.com/imgextra/i1/3058416618/O1CN01ehzjSH1yl5n9u76dW_!!3058416618.jpg,https://img.alicdn.com/imgextra/i3/3058416618/O1CN01OorqRw1yl5n8RHndQ_!!3058416618.jpg', '新品上新', 0, 1000, 323.00, 2332.00, 's1,s2', '2020-11-15 13:42:43', '2020-12-10 11:11:20');
@@ -394,6 +394,14 @@ CREATE TABLE `shopcart`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 41 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 81 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+
+-- ----------------------------
+-- Records of shopcart
+-- ----------------------------
+INSERT INTO `shopcart` VALUES (80, 1, 10, 22, 0, 1, '2020-12-11 18:32:49', '2020-12-11 18:32:49');
+INSERT INTO `shopcart` VALUES (79, 1, 10, 23, 0, 1, '2020-12-11 18:32:48', '2020-12-11 18:32:48');
+INSERT INTO `shopcart` VALUES (75, 1, 7, 16, 0, 1, '2020-12-11 18:27:20', '2020-12-11 18:27:20');
+INSERT INTO `shopcart` VALUES (76, 1, 7, 17, 0, 1, '2020-12-11 18:27:22', '2020-12-11 18:27:22');
 
 SET FOREIGN_KEY_CHECKS = 1;
