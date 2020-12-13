@@ -112,7 +112,7 @@ exports.getInfo = async (ctx) => {
     const sql = `select * from shop_user where userId=${ids}`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
-      if (res[0].avatar != null) {
+      if (res[0].avatar != null && res[0].avatar) {
         // 使用获取文件的方法
         res[0].avatar = await getFile(res[0].avatar)
         resolve(res[0])
@@ -134,12 +134,12 @@ exports.modify = async(ctx) => {
   // 组装数据
   const data = ctx.request.body
   const body = {
-    userName: data.userName ? data.userName : null,
-    phone: data.phone ? data.phone : null,
-    sex: data.sex ? data.sex : null,
-    birthday: data.birthday ? data.birthday : null,
-    descText: data.descText ? data.descText : null,
-    password: data.password ? data.password : null,
+    userName: data.userName != undefined ? data.userName : null,
+    phone: data.phone != undefined  ? data.phone : null,
+    sex: data.sex != undefined  ? data.sex : null,
+    birthday: data.birthday != undefined  ? data.birthday : null,
+    descText: data.descText != undefined  ? data.descText : null,
+    password: data.password != undefined  ? data.password : null,
   }
   let mySqlString = []
   for (const prop in body) {
@@ -165,7 +165,7 @@ exports.modify = async(ctx) => {
       ids = -1
     }
   })
-  console.log(mySqlString)
+  console.log(mySqlString, 'mySqlString')
   const sql = `update shop_user set ${mySqlString} where userId = ${ids}`
   const res = await mySqlServer.mySql(sql)
   if (res) {

@@ -105,16 +105,16 @@ exports.goodsList = async (ctx, next) => {
     return
   }
   const body = {
-    page: null,
-    size: null,
-    pageNum: null,
-    total: null,
-    list: null
+    page: 0,
+    size: 0,
+    pageNum: 0,
+    total: 0,
+    list: []
   }
   const forGoods = new Promise(async(resolve) => {
     // 获取 所有商品列表（分页处理）
     // select count(*) from (select * from t2 limit 1) a
-    const sql = `select count(*) from goodsdetails order by createTime desc`
+    const sql = `select count(*) from goodsdetails order by updateTime desc`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
       const total = res[0]['count(*)']
@@ -125,7 +125,7 @@ exports.goodsList = async (ctx, next) => {
   })
   const goodsList = new Promise(async (resolve) => {
     // 按最新时间 分页查询
-    const sql = `select * from goodsdetails order by createTime desc limit ${(page-1)*size},${size}`
+    const sql = `select * from goodsdetails order by updateTime desc limit ${(page-1)*size},${size}`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
       // const promise = res.map(b => mySqlServer.mySql(`select * from goodsdetails_sku where parentId = ${b.id}`))
