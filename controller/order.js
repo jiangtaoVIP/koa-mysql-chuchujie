@@ -1,0 +1,1 @@
+// INSERT INTO shop_order (orderId) VALUES (md5(uuid()))

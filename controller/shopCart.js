@@ -284,3 +284,65 @@ exports.delete = async (ctx) => {
     }
   }
 }
+
+// 修改购物车
+exports.edit = async(ctx) => {
+  const data = ctx.request.body
+  if (!data.id) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  function updateShopCart() {
+    return new Promise(async(resolve) => {
+      const edit_params = [data.listId, data.cart_num, data.id]
+      const edit_sql = `update shopcart set listId=?,cart_num=? where id =?`
+      const edit_res = await mySqlServer.mySql(edit_sql, edit_params)
+      if (edit_res) {
+        resolve({
+          code: 0,
+          message: '成功'
+        })
+      } else {
+        resolve({
+          code: -1,
+          message: '失败'
+        })
+      }
+    })
+  }
+  const allFn = new Promise(async(resolve) => {
+    // 判断是否有规格商品 没有listId则无规格
+    if (data.listId && data.oldListId) {
+      // 先查询是否有相同规格的 有就返回提示有相同的
+
+      // 旧的 和新的 不对等 直接拿新的查询 数据库是否存在
+      if (data.listId != data.oldListId) {
+        const weight_res = await mySqlServer.mySql(`select * from shopcart where listId = ${data.listId}`)
+        if (weight_res.length > 0) {
+          resolve({
+            code: 0,
+            message: '你已选过该款式'
+          })
+        } else {
+          // 没有 相同款式则直接修改
+          const editData = await updateShopCart()
+          resolve(editData)
+        }
+      } else {
+        // 旧的 和新的 对等 说明没有改listId 直接修改
+        const editData = await updateShopCart()
+        resolve(editData)
+      }
+    } else {
+      // 无规格 直接修改
+      const editData = await updateShopCart()
+      resolve(editData)
+    }
+  })
+  const res = await allFn
+  if (res.code === 0) {
+    ctx.success('', res.message)
+  } else {
+    ctx.fail('失败', -1)
+  }
+}

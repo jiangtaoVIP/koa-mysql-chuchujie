@@ -56,7 +56,7 @@ router.post('/add', shopCart.add)
 // #region
 /**
  * @swagger
- * /shopCart/add:
+ * /shopCart/delete:
  *   post:
  *     description: 加入购物车
  *     tags: [购物车模块]
@@ -74,4 +74,40 @@ router.post('/add', shopCart.add)
  */
 // #endregion
 router.post('/delete', shopCart.delete)
+// #region
+/**
+ * @swagger
+ * /shopCart/edit:
+ *   post:
+ *     description: 加入购物车
+ *     tags: [购物车模块]
+ *     produces:
+ *       - multipart/form-data
+ *     parameters:
+ *       - name: goodsId
+ *         description: 商品id
+ *         in: formData
+ *         required: true
+ *         type: number
+ *       - name: listId
+ *         description: list类目组合id
+ *         in: formData
+ *         required: false
+ *         type: number
+ *       - name: none_sku
+ *         description: 是否为无规格商品
+ *         in: formData
+ *         required: true
+ *         type: boolean
+ *       - name: cart_num
+ *         description: 选择的商品数量
+ *         in: formData
+ *         required: true
+ *         type: number
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/edit', shopCart.edit)
 module.exports = router

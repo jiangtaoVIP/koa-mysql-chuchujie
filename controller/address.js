@@ -98,7 +98,7 @@ exports.getList = async (ctx, next) => {
     }
   })
   if (ids != -1 && ids != '') {
-    const sql = `select * from shop_address where parentId=${ids}`
+    const sql = `select * from shop_address where parentId=${ids} order by createTime desc`
     const res = await mySqlServer.mySql(sql)
     if (res.length > 0) {
       res.forEach(item => {
@@ -140,7 +140,7 @@ exports.defaultAddress = async(ctx) => {
     if (res && res.length > 0) {
       res.forEach(item => {
         // 判断其中是否有默认地址
-        if (item.isDefault == 1) {
+        if (item.isDefault == 1 && data.isDefault == 1) {
           // 有的话修改为 否
           const mySql = `update shop_address set isDefault=0 where id=${item.id}`
           mySqlServer.mySql(mySql).then(res => {
