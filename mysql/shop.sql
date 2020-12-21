@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 21/12/2020 14:11:11
+ Date: 21/12/2020 16:59:53
 */
 
 SET NAMES utf8mb4;
@@ -55,14 +55,14 @@ CREATE TABLE `category_one`  (
 -- ----------------------------
 -- Records of category_one
 -- ----------------------------
-INSERT INTO `category_one` VALUES (1, 'boysClothing', '男装', '2020-11-11 11:38:40', NULL);
-INSERT INTO `category_one` VALUES (2, 'appliances', '电器', '2020-11-11 11:39:27', NULL);
-INSERT INTO `category_one` VALUES (3, 'decorations', '饰品', '2020-11-11 11:41:34', NULL);
-INSERT INTO `category_one` VALUES (4, 'general', '百货', '2020-11-11 11:42:16', NULL);
-INSERT INTO `category_one` VALUES (5, 'food', '食品', '2020-11-11 11:42:33', NULL);
-INSERT INTO `category_one` VALUES (6, 'digital', '数码', '2020-11-11 11:47:14', NULL);
-INSERT INTO `category_one` VALUES (7, 'girlsClothing', '女装', '2020-11-11 11:51:18', NULL);
-INSERT INTO `category_one` VALUES (8, 'car', '车品', '2020-11-11 11:51:42', NULL);
+INSERT INTO `category_one` VALUES (1, 'boysClothing', '男装', '2020-11-11 11:38:40', '2020-12-21 15:51:51');
+INSERT INTO `category_one` VALUES (2, 'appliances', '电器', '2020-11-11 11:39:27', '2020-12-21 15:52:00');
+INSERT INTO `category_one` VALUES (3, 'decorations', '饰品', '2020-11-11 11:41:34', '2020-12-21 15:52:04');
+INSERT INTO `category_one` VALUES (4, 'general', '百货', '2020-11-11 11:42:16', '2020-12-21 15:52:07');
+INSERT INTO `category_one` VALUES (5, 'food', '食品', '2020-11-11 11:42:33', '2020-12-21 15:52:10');
+INSERT INTO `category_one` VALUES (6, 'digital', '数码', '2020-11-11 11:47:14', '2020-12-21 15:52:14');
+INSERT INTO `category_one` VALUES (7, 'girlsClothing', '女装', '2020-11-11 11:51:18', '2020-12-21 15:52:17');
+INSERT INTO `category_one` VALUES (8, 'car', '车品', '2020-11-11 11:51:42', '2020-12-21 15:52:20');
 
 -- ----------------------------
 -- Table structure for category_two
@@ -356,7 +356,7 @@ CREATE TABLE `shop_order`  (
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   `userId` int(11) NULL DEFAULT NULL COMMENT '所属的用户id',
   `goodsId` int(11) NULL DEFAULT NULL COMMENT '所属的商品id',
-  `list` json NULL COMMENT '所属的规格list数据（可以有多个）',
+  `list` varchar(9999) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属的规格list数据（可以有多个）',
   `none_sku` tinyint(1) NULL DEFAULT 0 COMMENT '是否为无规格商品(0 false，1 true)',
   `orderStatus` enum('DFK','DFH','DSH','DPJ') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'DFK' COMMENT '订单状态（DFK,DFH,DSH,DPJ）（代付款，代发货，待收货，待评价）',
   `descText` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单备注（可为空）',
@@ -383,6 +383,7 @@ INSERT INTO `shop_order` VALUES (18, 'd54ebd9c07b4bf0226d4ef7da3ca21a2', '2020-1
 INSERT INTO `shop_order` VALUES (19, '497c4dfcf7ad0da9ea0d38c616d515dd', '2020-12-19 09:39:23', '2020-12-19 09:39:23', 1, 2, '[{\"listId\": 7, \"cart_num\": 1}, {\"listId\": 6, \"cart_num\": 2}]', 0, 'DFK', '', 25);
 INSERT INTO `shop_order` VALUES (20, 'e899666ee2e78aec969496016af1bb01', '2020-12-19 11:28:28', '2020-12-19 11:28:28', 1, 10, '[{\"listId\": 23, \"cart_num\": 2}]', 0, 'DFK', '', 26);
 INSERT INTO `shop_order` VALUES (21, 'e899666ee2e78aec969496016af1bb01', '2020-12-19 11:28:28', '2020-12-19 11:28:28', 2, 10, '[{\"listId\": 23, \"cart_num\": 2}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (22, '03f6b078dbb1cb55edcfcab2b487f623', '2020-12-21 16:53:19', '2020-12-21 16:53:19', 1, 7, '[{\"listId\":17,\"cart_num\":17}]', 0, 'DFK', '', 26);
 
 -- ----------------------------
 -- Table structure for shop_user
