@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 21/12/2020 09:56:04
+ Date: 21/12/2020 14:11:11
 */
 
 SET NAMES utf8mb4;
@@ -405,7 +405,7 @@ CREATE TABLE `shop_user`  (
 -- ----------------------------
 -- Records of shop_user
 -- ----------------------------
-INSERT INTO `shop_user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', '2020-12-21 09:55:41', '2020-12-21 09:55:44');
+INSERT INTO `shop_user` VALUES (1, '有人@你', '18899796648', 'M', '$2a$10$xaSX9eafON00WTmpBYVi9OTD/WYEwyATKwGvMUJ64ckUqT8ZTZzWW', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', '2020-12-21 09:55:41', '2020-12-21 10:41:54');
 
 -- ----------------------------
 -- Table structure for shopcart
