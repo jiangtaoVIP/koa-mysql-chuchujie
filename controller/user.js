@@ -1,6 +1,7 @@
 const mySqlServer = require("../mysql/index.js")
 const jwt = require('jsonwebtoken')
 const { getFile } = require('../model/getfile')
+const { encrypt, decrypt } = require('../model/crypt')
 exports.getList = async (ctx, next) => {
   /*
   获取用户列表
@@ -60,9 +61,10 @@ exports.login = async (ctx, next) => {
 //    ctx.fail('验证码有误', -1)
 //    return
 //  }
- const sql = `select * from shop_user where phone = ${phone} and password = ${password}`
+ const sql = `select * from shop_user where phone = ${phone}`
  const res = await mySqlServer.mySql(sql)
- if (res.length === 1 && phone == res[0].phone && password == res[0].password) {
+ // 密码效验
+ if (res.length == 1 && phone == res[0].phone && decrypt(password, res[0].password)) {
    const token = jwt.sign({
      name: res[0].userName,
      id: res[0].userId
