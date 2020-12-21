@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 11/12/2020 18:34:44
+ Date: 21/12/2020 09:56:04
 */
 
 SET NAMES utf8mb4;
@@ -329,12 +329,60 @@ CREATE TABLE `shop_address`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`, `parentId`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shop_address
 -- ----------------------------
 INSERT INTO `shop_address` VALUES (4, 2, 'sa', NULL, NULL, NULL, NULL, NULL, NULL, 0, '2020-11-14 01:05:13', '2020-11-18 10:29:12');
+INSERT INTO `shop_address` VALUES (19, 1, '讲台', '18899796648', '北京市', '北京市', '东城区', '都算是', '441144', 0, '2020-12-15 18:01:09', '2020-12-15 18:19:56');
+INSERT INTO `shop_address` VALUES (18, 1, '几', '18899796648', '北京市', '北京市', '西城区', '加速度', '157841', 0, '2020-12-15 18:00:39', '2020-12-15 18:21:10');
+INSERT INTO `shop_address` VALUES (20, 1, '多少度', '12345678999', '北京市', '北京市', '朝阳区', '多少度', '123456', 0, '2020-12-15 18:04:18', '2020-12-15 18:19:05');
+INSERT INTO `shop_address` VALUES (21, 1, '122', '12345678999', '北京市', '北京市', '东城区', '3434', '444444', 0, '2020-12-15 18:21:10', '2020-12-15 18:21:40');
+INSERT INTO `shop_address` VALUES (23, 1, '1', '12345678999', '北京市', '北京市', '东城区', '弱弱', '111111', 0, '2020-12-15 18:24:16', '2020-12-15 18:24:16');
+INSERT INTO `shop_address` VALUES (22, 1, '12222', '12345678999', '北京市', '北京市', '东城区', '3434', '444444', 0, '2020-12-15 18:21:22', '2020-12-15 18:29:49');
+INSERT INTO `shop_address` VALUES (24, 1, '12', '12345678900', '北京市', '北京市', '东城区', '33333', '333333', 0, '2020-12-15 18:29:49', '2020-12-20 18:38:20');
+INSERT INTO `shop_address` VALUES (25, 1, '122', '12345678900', '北京市', '北京市', '东城区', 'ewe', '111111', 0, '2020-12-15 18:33:44', '2020-12-20 18:38:20');
+INSERT INTO `shop_address` VALUES (26, 1, '第四十', '12345678900', '北京市', '北京市', '东城区', 'ewe', '111111', 1, '2020-12-15 18:33:54', '2020-12-20 18:38:20');
+
+-- ----------------------------
+-- Table structure for shop_order
+-- ----------------------------
+DROP TABLE IF EXISTS `shop_order`;
+CREATE TABLE `shop_order`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
+  `orderId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
+  `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `userId` int(11) NULL DEFAULT NULL COMMENT '所属的用户id',
+  `goodsId` int(11) NULL DEFAULT NULL COMMENT '所属的商品id',
+  `list` json NULL COMMENT '所属的规格list数据（可以有多个）',
+  `none_sku` tinyint(1) NULL DEFAULT 0 COMMENT '是否为无规格商品(0 false，1 true)',
+  `orderStatus` enum('DFK','DFH','DSH','DPJ') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'DFK' COMMENT '订单状态（DFK,DFH,DSH,DPJ）（代付款，代发货，待收货，待评价）',
+  `descText` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单备注（可为空）',
+  `addressId` int(11) NULL DEFAULT NULL COMMENT '订单收货地址',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of shop_order
+-- ----------------------------
+INSERT INTO `shop_order` VALUES (6, '5148336c6709dd02e79a8ce3adc70fd9', '2020-12-18 18:12:17', '2020-12-18 18:12:17', 1, 7, '[{\"listId\": 17, \"cart_num\": 1}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (7, 'c70af6cf7b52ca62e3729a0f80395de6', '2020-12-18 18:21:28', '2020-12-21 09:39:05', 1, 2, '[{\"listId\": 6, \"cart_num\": 2}, {\"listId\": 7, \"cart_num\": 1}]', 0, 'DFH', '', 26);
+INSERT INTO `shop_order` VALUES (8, 'cb5f920a56ae406b54003cd990d427e6', '2020-12-18 18:21:28', '2020-12-21 09:39:02', 1, 10, '[{\"listId\": 22, \"cart_num\": 1}, {\"listId\": 23, \"cart_num\": 2}]', 0, 'DSH', '', 26);
+INSERT INTO `shop_order` VALUES (9, 'c98c92a044c509b89b41ef0d1755f7bf', '2020-12-18 18:21:28', '2020-12-21 09:39:09', 1, 7, '[{\"listId\": 17, \"cart_num\": 5}]', 0, 'DPJ', '', 26);
+INSERT INTO `shop_order` VALUES (10, '05069bb7b788d0652b3b1f37ebc288af', '2020-12-18 18:21:28', '2020-12-18 18:21:28', 1, 14, '[{\"cart_num\": 4}]', 1, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (11, '96e48814456e969c61051a0e83629e80', '2020-12-18 18:23:08', '2020-12-18 18:23:08', 1, 7, '[{\"listId\": 17, \"cart_num\": 5}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (12, 'd325d10bd6a7a686e3a830219a0a5c48', '2020-12-18 18:23:08', '2020-12-18 18:23:08', 1, 2, '[{\"listId\": 6, \"cart_num\": 2}, {\"listId\": 7, \"cart_num\": 1}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (13, '2b46256f29b031cf01391b29a03abed1', '2020-12-18 18:23:08', '2020-12-18 18:23:08', 1, 10, '[{\"listId\": 22, \"cart_num\": 1}, {\"listId\": 23, \"cart_num\": 2}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (14, '0a7b1b663b3ef61c934da0ed396921c0', '2020-12-18 18:23:08', '2020-12-18 18:23:08', 1, 14, '[{\"cart_num\": 4}]', 1, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (15, '7e0cc62c4f561d0a2469ebd32fd48d07', '2020-12-18 18:40:37', '2020-12-18 18:40:37', 1, 2, '[{\"listId\": 7, \"cart_num\": 1}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (16, 'e275f0169f601840afbe06e9f66a23d8', '2020-12-19 09:39:23', '2020-12-19 09:39:23', 1, 10, '[{\"listId\": 23, \"cart_num\": 2}, {\"listId\": 22, \"cart_num\": 1}]', 0, 'DFK', '', 25);
+INSERT INTO `shop_order` VALUES (17, 'ad18108fef437e70e3dc3572e24c272f', '2020-12-19 09:39:23', '2020-12-19 09:39:23', 1, 7, '[{\"listId\": 17, \"cart_num\": 5}]', 0, 'DFK', '', 25);
+INSERT INTO `shop_order` VALUES (18, 'd54ebd9c07b4bf0226d4ef7da3ca21a2', '2020-12-19 09:39:23', '2020-12-19 09:39:23', 1, 14, '[{\"cart_num\": 4}]', 1, 'DFK', '', 25);
+INSERT INTO `shop_order` VALUES (19, '497c4dfcf7ad0da9ea0d38c616d515dd', '2020-12-19 09:39:23', '2020-12-19 09:39:23', 1, 2, '[{\"listId\": 7, \"cart_num\": 1}, {\"listId\": 6, \"cart_num\": 2}]', 0, 'DFK', '', 25);
+INSERT INTO `shop_order` VALUES (20, 'e899666ee2e78aec969496016af1bb01', '2020-12-19 11:28:28', '2020-12-19 11:28:28', 1, 10, '[{\"listId\": 23, \"cart_num\": 2}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (21, 'e899666ee2e78aec969496016af1bb01', '2020-12-19 11:28:28', '2020-12-19 11:28:28', 2, 10, '[{\"listId\": 23, \"cart_num\": 2}]', 0, 'DFK', '', 26);
 
 -- ----------------------------
 -- Table structure for shop_user
@@ -357,28 +405,7 @@ CREATE TABLE `shop_user`  (
 -- ----------------------------
 -- Records of shop_user
 -- ----------------------------
-INSERT INTO `shop_user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', NULL, '2020-12-01 09:43:58');
-INSERT INTO `shop_user` VALUES (2, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:08');
-INSERT INTO `shop_user` VALUES (3, '2', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:09');
-INSERT INTO `shop_user` VALUES (4, '2', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:10');
-INSERT INTO `shop_user` VALUES (5, '21', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:11');
-INSERT INTO `shop_user` VALUES (6, '是多少', '2', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:12');
-INSERT INTO `shop_user` VALUES (7, '12', '1', NULL, '123456', '10000', NULL, NULL, NULL, '2020-11-23 00:23:13');
-INSERT INTO `shop_user` VALUES (8, '2', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
-INSERT INTO `shop_user` VALUES (9, '1', '2', NULL, NULL, '10000', NULL, NULL, NULL, '2020-11-22 15:15:00');
-INSERT INTO `shop_user` VALUES (10, '是多少', '1', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:01');
-INSERT INTO `shop_user` VALUES (11, '12', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:02');
-INSERT INTO `shop_user` VALUES (12, '212', '212', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:03');
-INSERT INTO `shop_user` VALUES (13, '多福多寿', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:04');
-INSERT INTO `shop_user` VALUES (14, '发的发生', '21', NULL, NULL, NULL, NULL, NULL, NULL, '2020-11-03 10:59:05');
-INSERT INTO `shop_user` VALUES (15, 'ewewe', '21', NULL, NULL, NULL, NULL, NULL, '2020-10-31 16:27:24', '2020-11-03 10:59:06');
-INSERT INTO `shop_user` VALUES (16, '放松放松', '1', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:24', '2020-11-03 10:59:06');
-INSERT INTO `shop_user` VALUES (17, '任务分为', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:27', '2020-11-03 10:59:07');
-INSERT INTO `shop_user` VALUES (18, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:28', '2020-11-03 10:59:08');
-INSERT INTO `shop_user` VALUES (19, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:29', '2020-11-03 10:59:09');
-INSERT INTO `shop_user` VALUES (20, '2', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:30', '2020-11-03 10:59:09');
-INSERT INTO `shop_user` VALUES (21, '放松放松', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:32', '2020-11-03 10:59:10');
-INSERT INTO `shop_user` VALUES (22, '分为服务费', '21', NULL, NULL, NULL, NULL, NULL, '2020-11-02 17:07:33', '2020-11-03 10:59:12');
+INSERT INTO `shop_user` VALUES (1, '有人@你', '18899796648', 'M', '123456', '10000', '1606406400000', '的技术交底大家都减速电机三件大事的师父是非得失', '2020-12-21 09:55:41', '2020-12-21 09:55:44');
 
 -- ----------------------------
 -- Table structure for shopcart
@@ -394,14 +421,15 @@ CREATE TABLE `shopcart`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 81 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 89 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Records of shopcart
 -- ----------------------------
-INSERT INTO `shopcart` VALUES (80, 1, 10, 22, 0, 1, '2020-12-11 18:32:49', '2020-12-11 18:32:49');
-INSERT INTO `shopcart` VALUES (79, 1, 10, 23, 0, 1, '2020-12-11 18:32:48', '2020-12-11 18:32:48');
-INSERT INTO `shopcart` VALUES (75, 1, 7, 16, 0, 1, '2020-12-11 18:27:20', '2020-12-11 18:27:20');
-INSERT INTO `shopcart` VALUES (76, 1, 7, 17, 0, 1, '2020-12-11 18:27:22', '2020-12-11 18:27:22');
+INSERT INTO `shopcart` VALUES (88, 1, 10, 23, 0, 2, '2020-12-19 11:19:45', '2020-12-19 11:19:45');
+INSERT INTO `shopcart` VALUES (75, 1, 7, 17, 0, 17, '2020-12-11 18:27:20', '2020-12-19 10:04:00');
+INSERT INTO `shopcart` VALUES (81, 1, 14, NULL, 1, 22, '2020-12-14 10:40:44', '2020-12-19 11:15:04');
+INSERT INTO `shopcart` VALUES (84, 1, 2, 6, 0, 2, '2020-12-15 15:42:10', '2020-12-17 14:44:39');
+INSERT INTO `shopcart` VALUES (85, 1, 2, 7, 0, 1, '2020-12-17 17:35:59', '2020-12-17 17:35:59');
 
 SET FOREIGN_KEY_CHECKS = 1;

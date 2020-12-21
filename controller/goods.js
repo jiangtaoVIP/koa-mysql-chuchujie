@@ -105,7 +105,7 @@ exports.goodDetails = async (ctx, next) => {
     return new Promise(async(resolve, reject) => {
       const skus = skuList.split(',').filter(item => item !== '')
       if (skus.length > 0) {
-        body['sku'] = []
+        body['skuList'] = []
         const promise = skus.map(it => mySqlServer.mySql(`select * from goodsdetails_sku where k_s = '${it}'`))
         const all = await Promise.all(promise)
         if (all.length > 0) {
@@ -117,18 +117,18 @@ exports.goodDetails = async (ctx, next) => {
               all_two.forEach(v => {
                 if (item[0].id == v[0].skuId) {
                   item[0]['v'] = v
-                  body['sku'].push(item[0])
+                  body['skuList'].push(item[0])
                 }
               })
             })
             resolve()
           } else {
-            body['sku'] = []
+            body['skuList'] = []
             resolve()
           }
         }
       } else {
-        body['sku'] = []
+        body['skuList'] = []
         resolve()
       }
     })
@@ -164,7 +164,7 @@ exports.goodDetails = async (ctx, next) => {
     if (body.sku) {
       await Promise.all([skuPromise(body.sku), listPromise])
     } else {
-      body['sku'] = []
+      body['skuList'] = []
     }
     ctx.success(body, '成功')
   } else {
