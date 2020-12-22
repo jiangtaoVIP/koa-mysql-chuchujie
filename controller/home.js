@@ -1,6 +1,6 @@
 const mySqlServer = require("../mysql/index.js")
 require('dotenv').config()
-const { DB_HOST, DB_PORT } = process.env
+const { DB_HOST, DB_PORT, ENV, PRO_HOST } = process.env
 exports.getData = async (ctx, next) => {
   const data = {
     message: null, // 首页通知
@@ -40,7 +40,7 @@ exports.getData = async (ctx, next) => {
         res.forEach(item => {
           all.forEach(it => {
             if (item.icon == it[0].id) {
-              item.icon = `http://${DB_HOST}:${DB_PORT}/upload/image/${it[0].id}.${it[0].type}`
+              item.icon = ENV == 'production' ? `http://${PRO_HOST}/upload/image/${it[0].id}.${it[0].type}` : `http://${DB_HOST}:${DB_PORT}/upload/image/${it[0].id}.${it[0].type}`
             }
           })
         })

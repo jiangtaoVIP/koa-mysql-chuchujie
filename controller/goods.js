@@ -1,6 +1,6 @@
 const mySqlServer = require("../mysql/index.js")
 require('dotenv').config()
-const { DB_HOST, DB_PORT } = process.env
+const { DB_HOST, DB_PORT, ENV, PRO_HOST } = process.env
 // 获取商品一级分类
 exports.categoryOne = async(ctx, next) => {
   const sql = `select * from category_one`
@@ -28,7 +28,7 @@ exports.categoryTwo = async(ctx, next) => {
         res.forEach(item => {
           all.forEach(it => {
             if (item.icon == it[0].id) {
-              item.icon = `http://${DB_HOST}:${DB_PORT}/upload/image/${it[0].id}.${it[0].type}`
+              item.icon = ENV == 'production' ? `http://${PRO_HOST}/upload/image/${it[0].id}.${it[0].type}` : `http://${DB_HOST}:${DB_PORT}/upload/image/${it[0].id}.${it[0].type}`
             }
           })
         })

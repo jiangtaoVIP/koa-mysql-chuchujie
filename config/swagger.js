@@ -2,14 +2,14 @@ const router = require('koa-router')(); // 引入路由函数
 const path = require('path');
 const swaggerJSDoc = require('swagger-jsdoc');
 require('dotenv').config()
-const { DB_HOST, DB_PORT } = process.env
+const { DB_HOST, DB_PORT, ENV, PRO_HOST } = process.env
 const swaggerDefinition = {
   info: {
     title: '楚楚街api接口',
     version: '1.0.0',
     description: 'API'
   },
-  host: `${DB_HOST}:${DB_PORT}`,
+  host: ENV == 'production' ? PRO_HOST : `${DB_HOST}:${DB_PORT}`,
   basePath: '/' // Base path (optional)
 };
 const options = {
