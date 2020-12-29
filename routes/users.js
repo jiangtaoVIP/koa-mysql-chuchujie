@@ -46,7 +46,7 @@ router.get('/getList', user.getList)
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: userName
+ *       - name: phone
  *         description: 账号
  *         in: formData
  *         required: true
@@ -77,13 +77,23 @@ router.post('/login', user.login)
  *     produces:
  *       - application/x-www-form-urlencoded
  *     parameters:
- *       - name: userName
- *         description: 账号
+ *       - name: phone
+ *         description: 手机号
  *         in: formData
  *         required: true
  *         type: string
  *       - name: password
  *         description: 密码
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: email
+ *         description: 邮箱地址
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: code
+ *         description: 邮箱验证码
  *         in: formData
  *         required: true
  *         type: string
@@ -127,4 +137,5 @@ router.get('/getInfo', user.getInfo)
  */
 // #endregion
 router.post('/modify', user.modify)
+router.post('/resetPass', user.resetPass)
 module.exports = router

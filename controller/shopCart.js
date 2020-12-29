@@ -234,11 +234,13 @@ exports.add = async(ctx) => {
         if (res_none_sku.length > 0) {
           // 有 修改数量
           const updata_res = await updataShopCart(res_none_sku[0].id, data.cart_num)
-          resolve(updata_res)
+          // resolve(updata_res)
+          resolve('已有相同规格商品，增加商品数量')
         } else {
           // 无 添加
           const insert_res = await insertShopCart()
-          resolve(insert_res)
+          // resolve(insert_res)
+          resolve('添加成功')
         }
       } else {
         // 3无规格商品 判断
@@ -248,19 +250,21 @@ exports.add = async(ctx) => {
         if (true_sku_res.length > 0) {
           // 有 修改数量
           const updata_res_two = await updataShopCart(true_sku_res[0].id, data.cart_num)
-          resolve(updata_res_two)
+          // resolve(updata_res_two)
+          resolve('已有相同规格商品，增加商品数量')
         } else {
           // 无 添加
           const insert_res_two = await insertShopCart()
-          resolve(insert_res_two)
+          // resolve(insert_res_two)
+          resolve('添加成功')
         }
       }
     })
   }
   // 返回
   const res = await allList()
-  if (res == 0) {
-    ctx.success('', '成功')
+  if (res) {
+    ctx.success('', res)
   } else {
     ctx.fail('失败', -1)
   }
@@ -277,11 +281,9 @@ exports.delete = async (ctx) => {
   const res = await mySqlServer.mySql(sql)
   console.log(res)
   if (res) {
-    if (res) {
-      ctx.success('', '成功')
-    } else {
-      ctx.fail('失败', -1)
-    }
+    ctx.success('', '成功')
+  } else {
+    ctx.fail('失败', -1)
   }
 }
 

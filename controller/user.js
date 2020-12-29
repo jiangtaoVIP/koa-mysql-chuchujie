@@ -2,6 +2,12 @@ const mySqlServer = require("../mysql/index.js")
 const jwt = require('jsonwebtoken')
 const { getFile } = require('../model/getfile')
 const { encrypt, decrypt } = require('../model/crypt')
+
+const EmailConfig = require('../config/email')
+const Redis = require('koa-redis')
+//新建redis客户端
+const Store = Redis({ host: EmailConfig.redis.host, port: EmailConfig.redis.port }).client
+
 exports.getList = async (ctx, next) => {
   /*
   获取用户列表
@@ -61,10 +67,10 @@ exports.login = async (ctx, next) => {
 //    ctx.fail('验证码有误', -1)
 //    return
 //  }
- const sql = `select * from shop_user where phone = ${phone}`
+ const sql = `select * from shop_user where phone = '${phone}' or email = '${phone}'`
  const res = await mySqlServer.mySql(sql)
  // 密码效验
- if (res.length == 1 && phone == res[0].phone && decrypt(password, res[0].password)) {
+ if (res.length == 1 && decrypt(password, res[0].password)) {
    const token = jwt.sign({
      name: res[0].userName,
      id: res[0].userId
@@ -82,17 +88,64 @@ exports.register = async (ctx, next) => {
   password = 密码（必填）
   */
   const data = ctx.request.body
-  if (!data.phone || !data.password) {
+  if (!data.phone || !data.password || !data.email || !data.code) {
     ctx.fail('参数错误', -1)
     return
   }
-  const params = [data.userName, data.password, data.sex, data.phone, data.city, data.area, data.avatar]
-  const sql = `insert into shop_user (userName,password,sex,phone,city,area,avatar) values (?,?,?,?,?,?,?)`
-  const res = await mySqlServer.mySql(sql, params)
-  if (res) {
-    ctx.success('', '成功')
+
+  function registerFn() {
+    return new Promise(async(resolve) => {
+    const params = [data.phone, encrypt(data.password), data.email]
+    const sql = `insert into shop_user (phone,password,email) values (?,?,?)`
+    const res = await mySqlServer.mySql(sql, params)
+    console.log('执行了添加用户', res)
+    if (res) {
+      resolve('成功')
+    } else {
+      resolve(-1)
+    }
+  })
+  }
+
+  const allFn = new Promise(async(resolve) => {
+    const saveCode = await Store.hget(`nodemail:${data.email}`, 'code')
+    const saveExpire = await Store.hget(`nodemail:${data.email}`, 'expire')
+    if (saveCode && saveExpire) {
+      if (data.code.toUpperCase() ==  saveCode) {
+        if (new Date().getTime() - saveExpire > 0) {
+          resolve('验证码已过期，请重新尝试')
+        } else {
+          const sql = `select * from shop_user where phone = ${data.phone}`
+          mySqlServer.mySql(sql).then(res => {
+            console.log(res, '注册')
+            if (res.length === 0) {
+              registerFn().then(register_res => {
+                if (register_res != -1) {
+                  resolve(0)
+                } else {
+                  resolve('注册失败')
+                }
+              })
+            } else {
+              resolve('该手机号已被注册！')
+            }
+          })
+        }
+      } else {
+        resolve('请填写正确的验证码')
+      }
+    } else {
+      resolve('注册失败')
+    }
+  })
+
+  const res = await allFn
+  if (res == 0) {
+    ctx.success('', '注册成功')
+    // 注册成功清楚code
+    Store.hmset(`nodemail:${data.email}`, 'code', '')
   } else {
-    ctx.fail('参数错误', -1)
+    ctx.fail(res, -1)
   }
 }
 
@@ -110,16 +163,52 @@ exports.getInfo = async (ctx) => {
       ids = -1
     }
   })
+  let body = {} // 用户数据
+  function avatarFn(avatarId) {
+    return new Promise(async(resolve) => {
+      if (avatarId !== null && avatarId) {
+        const res = await getFile(avatarId)
+        if (res) {
+          body['avatar'] = res
+          resolve(res)
+        }
+      } else {
+        resolve()
+      }
+    })
+  }
+  const orderNumFn = new Promise(async(resolve) => {
+    const DFK = await mySqlServer.mySql(`select count(*) from shop_order where userId = ${ids} and orderStatus = 'DFK'`)
+    const DFH = await mySqlServer.mySql(`select count(*) from shop_order where userId = ${ids} and orderStatus = 'DFH'`)
+    const DSH = await mySqlServer.mySql(`select count(*) from shop_order where userId = ${ids} and orderStatus = 'DSH'`)
+    const DPJ = await mySqlServer.mySql(`select count(*) from shop_order where userId = ${ids} and orderStatus = 'DPJ'`)
+    if (DFK.length > 0 && DFH.length > 0 && DSH.length > 0 && DPJ.length > 0) {
+      body['DFK'] = DFK[0]['count(*)']
+      body['DFH'] = DFH[0]['count(*)']
+      body['DSH'] = DSH[0]['count(*)']
+      body['DPJ'] = DPJ[0]['count(*)']
+      mySqlServer.mySql(`select count(*) from shopcart where userId = ${ids}`).then(num => {
+        if (num.length > 0) {
+          body['shopCartNum'] = num[0]['count(*)']
+          resolve()
+        } else {
+          resolve()
+        }
+      })
+    } else {
+      resolve()
+    }
+  })
   const userDetails = new Promise(async(resolve, reject) => {
     const sql = `select * from shop_user where userId=${ids}`
     const res = await mySqlServer.mySql(sql)
     if (res && res.length > 0) {
-      if (res[0].avatar != null && res[0].avatar) {
-        // 使用获取文件的方法
-        res[0].avatar = await getFile(res[0].avatar)
-        resolve(res[0])
+      body = res[0]
+      const all_res = await Promise.all([avatarFn(res[0].avatar), orderNumFn])
+      if (all_res.length > 0) {
+        resolve(0)
       } else {
-        resolve(res[0])
+        resolve(0)
       }
     } else {
       reject(-1)
@@ -127,7 +216,7 @@ exports.getInfo = async (ctx) => {
   })
   const res = await userDetails
   if (res != -1) {
-    ctx.success(res, '成功')
+    ctx.success(body, '成功')
   } else {
     ctx.fail('失败', -1)
   }
@@ -170,6 +259,27 @@ exports.modify = async(ctx) => {
   console.log(mySqlString, 'mySqlString')
   const sql = `update shop_user set ${mySqlString} where userId = ${ids}`
   const res = await mySqlServer.mySql(sql)
+  if (res) {
+    ctx.success('', '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+}
+
+exports.resetPass = async(ctx) => {
+  const { email, code, password } = ctx.request.body
+  if (!email || !code || !password) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const allFn = new Promise(async(resolve) => {
+    const saveCode = await Store.hget(`nodemail:${email}`, 'code')
+    const saveExpire = await Store.hget(`nodemail:${email}`, 'expire')
+    if (saveCode && saveExpire) {
+
+    }
+  })
+  const res = await allFn
   if (res) {
     ctx.success('', '成功')
   } else {

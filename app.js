@@ -33,6 +33,7 @@ const home = require('./routes/home')
 const shopCart = require('./routes/shopCart')
 const adminUser = require('./routes/adminUser')
 const order = require('./routes/order')
+const emailVerify = require('./routes/emailVerify')
 // error handler
 onerror(app)
 
@@ -107,7 +108,7 @@ app.use((ctx, next) => {
 app.use(koajwt({
   secret: 'my_token'
 }).unless({
-  path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/]
+  path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/, /\/emailVerify/]
 }))
 // logger
 app.use(async (ctx, next) => {
@@ -155,6 +156,7 @@ app.use(home.routes(), home.allowedMethods())
 app.use(shopCart.routes(), shopCart.allowedMethods())
 app.use(adminUser.routes(), adminUser.allowedMethods())
 app.use(order.routes(), order.allowedMethods())
+app.use(emailVerify.routes(), emailVerify.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)

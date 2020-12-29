@@ -1,6 +1,8 @@
 // INSERT INTO shop_order (orderId) VALUES (md5(uuid()))
 const mySqlServer = require("../mysql/index.js")
 const jwt = require('../model/tokenFn')
+const { getFile } = require('../model/getfile')
+
 exports.add = async(ctx) => {
   const userId = jwt.verify(ctx.header)
   if (!userId || userId == -1) {
@@ -43,6 +45,115 @@ exports.add = async(ctx) => {
   }
 }
 
+
+// 获取订单详情数据方法 （抽出来公用）（用于分页查询列表和查询详情路由）
+// start
+// 获取sku异步
+function skuListFn(skuList, id) {
+  return new Promise(async(resolve, reject) => {
+    const skus = skuList.split(',').filter(item => item !== '')
+    if (skus.length > 0) {
+      const promise = skus.map(it => mySqlServer.mySql(`select * from goodsdetails_sku where k_s = '${it}'`))
+      const all = await Promise.all(promise)
+      if (all.length > 0) {
+        const promise_two = all.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id} and parentId='${id}'`))
+        const all_two = await Promise.all(promise_two)
+        if (all_two.length > 0) {
+          all.forEach(item => {
+            item[0]['largeImageMode'] = item[0].largeImageMode != 0
+            all_two.forEach(v => {
+              if (item[0].id == v[0].skuId) {
+                item[0]['v'] = v
+              }
+            })
+          })
+          resolve(all)
+        } else {
+          resolve([])
+        }
+      }
+    } else {
+      resolve([])
+    }
+  })
+}
+// 获取商品详情异步
+function goodsdetails(id) {
+  return new Promise(async(resolve) => {
+    const sql = `select * from goodsdetails where id = ${id}`
+    const res = await mySqlServer.mySql(sql)
+    if (res) {
+      if (res.length > 0) {
+        // 只会查询到一个商品id 直接拿0索引
+        res[0]['none_sku'] = res[0].none_sku != 0
+        res[0]['skuList'] = []
+        skuListFn(res[0]['sku'], id).then(sku_res => {
+          // 获取sku列表
+          if (sku_res.length > 0) {
+            sku_res.forEach(v => {
+              res[0]['skuList'].push(v[0])
+            })
+          }
+          res[0]['sku'] = res[0].sku.split(',').filter(item => item !== '')
+          // 查询店铺详情
+          mySqlServer.mySql(`select * from admin_user where id = ${res[0].adminId}`).then(admin_res => {
+            // 获取 图片地址2
+            getFile(admin_res[0].avatar).then(url => {
+              admin_res[0].avatar = url
+              resolve({
+                goods: res[0],
+                admin: admin_res[0]
+              })
+            }).catch(err => {
+              resolve({
+                goods: res[0],
+                admin: admin_res[0]
+              })
+            })
+          })
+        })
+      }
+    }
+  })
+}
+// 获取选择的list数据
+function listSelect(list) {
+  return new Promise(async(resolve) => {
+    if (typeof(list) == 'string') {
+      const listData = JSON.parse(list)
+      // console.log(listData, '11')
+      if (listData.length > 0) {
+        let fag = 0
+        let dataList = []
+        listData.forEach(item => {
+          // 一个商品的list不可能同时出现 无规格和有规格两种list
+          // 判断 可以直接else返回，不会发生 循环中异步返回了值导致错误
+          if (item.listId) {
+            mySqlServer.mySql(`select * from goodsdetails_list where id = ${item.listId}`).then(res => {
+              fag ++
+              res[0]['cart_num'] = item.cart_num
+              for(let key in res[0]) {
+                if (res[0][key] == null) {
+                  delete res[0][key]
+                }
+              }
+              dataList.push(res[0])
+              if (fag === listData.length) {
+                resolve(dataList)
+              }
+            })
+          } else {
+            dataList.push(item)
+            resolve(dataList)
+          }
+        })
+      }
+    } else {
+      resolve([])
+    }
+  })
+}
+// end
 exports.getStatusList = async(ctx) => {
   const { page, size, orderStatus} = ctx.request.body
   const body = {
@@ -62,94 +173,6 @@ exports.getStatusList = async(ctx) => {
     ctx.fail('参数错误', -1)
     return
   }
-  // 获取sku异步
-  function skuListFn(skuList, id) {
-    return new Promise(async(resolve, reject) => {
-      const skus = skuList.split(',').filter(item => item !== '')
-      if (skus.length > 0) {
-        const promise = skus.map(it => mySqlServer.mySql(`select * from goodsdetails_sku where k_s = '${it}'`))
-        const all = await Promise.all(promise)
-        if (all.length > 0) {
-          const promise_two = all.map(item => mySqlServer.mySql(`select * from goodsdetails_type where skuId=${item[0].id} and parentId='${id}'`))
-          const all_two = await Promise.all(promise_two)
-          if (all_two.length > 0) {
-            all.forEach(item => {
-              item[0]['largeImageMode'] = item[0].largeImageMode != 0
-              all_two.forEach(v => {
-                if (item[0].id == v[0].skuId) {
-                  item[0]['v'] = v
-                }
-              })
-            })
-            resolve(all)
-          } else {
-            resolve([])
-          }
-        }
-      } else {
-        resolve([])
-      }
-    })
-  }
-  // 获取商品详情异步
-  function goodsdetails(id) {
-    return new Promise(async(resolve) => {
-      const sql = `select * from goodsdetails where id = ${id}`
-      const res = await mySqlServer.mySql(sql)
-      if (res) {
-        if (res.length > 0) {
-          // 只会查询到一个商品id 直接拿0索引
-          res[0]['none_sku'] = res[0]['none_sku'] != 0
-          res[0]['skuList'] = []
-          skuListFn(res[0]['sku'], id).then(sku_res => {
-            if (sku_res.length > 0) {
-              sku_res.forEach(v => {
-                res[0]['skuList'].push(v[0])
-              })
-            }
-            resolve(res[0])
-          })
-        }
-      }
-    })
-  }
-  // 获取选择的list数据
-  function listSelect(list) {
-    return new Promise(async(resolve) => {
-      if (typeof(list) == 'string') {
-        const listData = JSON.parse(list)
-        // console.log(listData, '11')
-        if (listData.length > 0) {
-          let fag = 0
-          let dataList = []
-          listData.forEach(item => {
-            // 一个商品的list不可能同时出现 无规格和有规格两种list
-            // 判断 可以直接else返回，不会发生 循环中异步返回了值导致错误
-            if (item.listId) {
-              mySqlServer.mySql(`select * from goodsdetails_list where id = ${item.listId}`).then(res => {
-                fag ++
-                res[0]['cart_num'] = item.cart_num
-                for(let key in res[0]) {
-                  if (res[0][key] == null) {
-                    delete res[0][key]
-                  }
-                }
-                dataList.push(res[0])
-                if (fag === listData.length) {
-                  resolve(dataList)
-                }
-              })
-            } else {
-              dataList.push(item)
-              resolve(dataList)
-            }
-          })
-        }
-      } else {
-        resolve([])
-      }
-    })
-  }
   // 每个数据的item 异步
   function bodyListFn(item) {
     return new Promise(async(resolve) => {
@@ -157,7 +180,8 @@ exports.getStatusList = async(ctx) => {
       const goods_res = await goodsdetails(item.goodsId)
       const list_res = await listSelect(item.list)
       if (goods_res && list_res) {
-        item['goodsId'] = goods_res
+        item['goods'] = goods_res.goods
+        item['admin'] = goods_res.admin
         item['list'] = list_res
         resolve(item)
       }
@@ -197,6 +221,93 @@ exports.getStatusList = async(ctx) => {
   const res = await allFn
   if (res != -1) {
     ctx.success(body, '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+}
+
+exports.changeOrderStatus = async(ctx) => {
+  const { id, orderStatus } = ctx.request.body
+  if (!id || !orderStatus) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  function allFn() {
+    return new Promise(async(resolve) => {
+      const status_sql = `update shop_order set orderStatus='${orderStatus}' where id =${id}`
+      const status_res = await mySqlServer.mySql(status_sql)
+      if (status_res) {
+        resolve('成功')
+      } else {
+        resolve(-1)
+      }
+    })
+  }
+  const res = await allFn()
+  if (res != -1) {
+    ctx.success('', res)
+  } else {
+    ctx.fail('失败', -1)
+  }
+}
+
+exports.deleteOrder = async(ctx) => {
+  const { id } = ctx.request.body
+  if (!id) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const sql = `delete from shop_order where id in (${id})`
+  const res = await mySqlServer.mySql(sql)
+  if (res) {
+    ctx.success('', '成功')
+  } else {
+    ctx.fail('失败', -1)
+  }
+}
+
+exports.details = async (ctx) => {
+  const { id } = ctx.request.body
+  if (!id) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  function addressDetails(id) {
+    return new Promise(async(resolve) => {
+      const res = await mySqlServer.mySql(`select * from shop_address where id = ${id}`)
+      if (res.length > 0) {
+        res[0]['isDefault'] = res[0].isDefault != 0
+        resolve(res[0])
+      } else {
+        resolve({})
+      }
+    })
+  } 
+  const allFn = new Promise(async(resolve) => {
+    const sql = `select * from shop_order where id = ${id}`
+    const res = await mySqlServer.mySql(sql)
+    if (res.length > 0) {
+      // 方法放在了外面
+      const goods_res = await goodsdetails(res[0].goodsId)
+      const list_res = await listSelect(res[0].list)
+      // 获得地址详情
+      const address_res = await addressDetails(res[0].addressId)
+      if (goods_res && list_res && address_res) {
+        res[0]['goods'] = goods_res.goods
+        res[0]['admin'] = goods_res.admin
+        res[0]['list'] = list_res
+        res[0]['address'] = address_res
+        resolve(res[0])
+      } else {
+        resolve(-1)
+      }
+    } else {
+      resolve(-1)
+    }
+  })
+  const res = await allFn
+  if (res != -1) {
+    ctx.success(res, '成功')
   } else {
     ctx.fail('失败', -1)
   }

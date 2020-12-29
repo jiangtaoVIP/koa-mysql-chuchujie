@@ -74,4 +74,72 @@ router.post('/add', order.add)
  */
 // #endregion
 router.post('/getStatusList', order.getStatusList)
+// #region
+/**
+ * @swagger
+ * /order/changeOrderStatus:
+ *   post:
+ *     description: 修改订单状态
+ *     tags: [订单模块]
+ *     produces:
+ *       - multipart/form-data
+ *     parameters:
+ *       - name: id
+ *         description: 订单id
+ *         in: formData
+ *         required: true
+ *         type: number
+ *       - name: szie
+ *         description: 订单状态（DFK,DFH,DSH,DPJ）（代付款，代发货，待收货，待评价）
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/changeOrderStatus', order.changeOrderStatus)
+// #region
+/**
+ * @swagger
+ * /order/deleteOrder:
+ *   post:
+ *     description: 删除订单
+ *     tags: [订单模块]
+ *     produces:
+ *       - multipart/form-data
+ *     parameters:
+ *       - name: id
+ *         description: 订单id
+ *         in: formData
+ *         required: true
+ *         type: number
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/deleteOrder', order.deleteOrder)
+// #region
+/**
+ * @swagger
+ * /order/details:
+ *   post:
+ *     description: 查询订单详情
+ *     tags: [订单模块]
+ *     produces:
+ *       - multipart/form-data
+ *     parameters:
+ *       - name: id
+ *         description: 订单id
+ *         in: formData
+ *         required: true
+ *         type: number
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/details', order.details)
 module.exports = router
