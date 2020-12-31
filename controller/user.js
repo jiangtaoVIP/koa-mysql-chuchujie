@@ -115,7 +115,7 @@ exports.register = async (ctx, next) => {
         if (new Date().getTime() - saveExpire > 0) {
           resolve('验证码已过期，请重新尝试')
         } else {
-          const sql = `select * from shop_user where phone = ${data.phone}`
+          const sql = `select * from shop_user where phone = '${data.phone}' or email = '${data.email}'`
           mySqlServer.mySql(sql).then(res => {
             console.log(res, '注册')
             if (res.length === 0) {
@@ -127,7 +127,7 @@ exports.register = async (ctx, next) => {
                 }
               })
             } else {
-              resolve('该手机号已被注册！')
+              resolve('该手机号/邮箱已被注册！')
             }
           })
         }
@@ -272,17 +272,97 @@ exports.resetPass = async(ctx) => {
     ctx.fail('参数错误', -1)
     return
   }
+  function modifyUser() {
+    return new Promise (async(resolve) => {
+      const isRepeat_res = await mySqlServer.mySql(`select * from shop_user where email='${email}'`)
+      if (isRepeat_res.length === 0) {
+        resolve('该账号未注册！')
+      } else {
+        const sql = `update shop_user set password='${encrypt(password)}' where email = '${email}'`
+        const res = await mySqlServer.mySql(sql)
+        if (res) {
+          resolve(0)
+        } else {
+          resolve('失败')
+        }
+      }
+    })
+  }
   const allFn = new Promise(async(resolve) => {
     const saveCode = await Store.hget(`nodemail:${email}`, 'code')
     const saveExpire = await Store.hget(`nodemail:${email}`, 'expire')
     if (saveCode && saveExpire) {
-
+      if (code.toUpperCase() ==  saveCode) {
+        if (new Date().getTime() - saveExpire > 0) {
+          resolve('验证码已过期，请重新尝试')
+        } else {
+          modifyUser().then(data => {
+            resolve(data)
+          })
+        }
+      } else {
+        resolve('请填写正确的验证码')
+      }
     }
   })
   const res = await allFn
-  if (res) {
+  if (res === 0) {
     ctx.success('', '成功')
+    // 注册成功清楚code
+    Store.hmset(`nodemail:${email}`, 'code', '')
   } else {
-    ctx.fail('失败', -1)
+    ctx.fail(res, -1)
+  }
+}
+
+exports.checkEmail = async(ctx) => {
+  const { email, code, userId } = ctx.request.body
+  console.log(email, code, userId)
+  if (!email || !code || !userId) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  function modifyEmail() {
+    return new Promise (async(resolve) => {
+      const isRepeat_res = await mySqlServer.mySql(`select * from shop_user where email='${email}'`)
+      if (isRepeat_res.length === 0) {
+        const sql = `update shop_user set email='${email}' where userId = '${userId}'`
+        const res = await mySqlServer.mySql(sql)
+        if (res) {
+          resolve(0)
+        } else {
+          resolve('失败')
+        }
+      } else {
+        resolve('该邮箱已被注册！')
+      }
+    })
+  }
+  function allFn() {
+    return new Promise(async(resolve) => {
+      const saveCode = await Store.hget(`nodemail:${email}`, 'code')
+      const saveExpire = await Store.hget(`nodemail:${email}`, 'expire')
+      if (saveCode && saveExpire) {
+        if (code.toUpperCase() ==  saveCode) {
+          if (new Date().getTime() - saveExpire > 0) {
+            resolve('验证码已过期，请重新尝试')
+          } else {
+            modifyEmail().then(data => {
+              resolve(data)
+            })
+          }
+        } else {
+          resolve('请填写正确的验证码')
+        }
+      }
+    })
+  }
+  const res = await allFn()
+  if (res === 0) {
+    ctx.success('', '成功')
+    // 成功清楚code
+    Store.hmset(`nodemail:${email}`, 'code', '')
+  } else {
+    ctx.fail(res, -1)
   }
 }

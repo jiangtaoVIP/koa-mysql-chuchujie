@@ -108,7 +108,7 @@ app.use((ctx, next) => {
 app.use(koajwt({
   secret: 'my_token'
 }).unless({
-  path: [/\/user\/login/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/, /\/emailVerify/]
+  path: [/\/user\/login/, /\/user\/resetPass/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/, /\/emailVerify/]
 }))
 // logger
 app.use(async (ctx, next) => {

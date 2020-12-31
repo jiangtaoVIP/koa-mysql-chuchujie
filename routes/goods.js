@@ -77,4 +77,25 @@ router.post('/getGoodsList', goods.getGoodsList)
  */
 // #endregion
 router.post('/goodDetails', goods.goodDetails)
+// #region
+/**
+ * @swagger
+ * /goods/searchGoodsList:
+ *   post:
+ *     description: 根据商品id 获取详情
+ *     tags: [商品模块]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: name
+ *         description: 商品搜索关键词（精确搜索空格隔开）
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/searchGoodsList', goods.searchGoodsList)
 module.exports = router

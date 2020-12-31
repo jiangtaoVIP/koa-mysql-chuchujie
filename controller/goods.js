@@ -171,3 +171,33 @@ exports.goodDetails = async (ctx, next) => {
     ctx.fail('失败', -1)
   }
 }
+
+
+exports.searchGoodsList = async(ctx) => {
+  const { name } = ctx.request.body
+  if (!name) {
+    ctx.success([], '成功')
+    return
+  }
+  let nameList = []
+  nameList = name.split(' ')
+  for (let i =0; i < nameList.length; i++) {
+    nameList[i] = `name like '%${nameList[i]}%' and`
+  }
+  nameList = nameList.toString()
+  if (nameList.indexOf('and') !== -1) {
+    nameList = nameList.substr(0, nameList.length - 3)
+  }
+  nameList = nameList.replace(/,/g, ' ')
+  console.log(nameList)
+  function allFn() {
+    return new Promise(async(resolve) => {
+      const sql = `select * from goodsdetails where ${nameList}`
+      console.log(sql)
+      const res = await mySqlServer.mySql(sql)
+      resolve(res)
+    })
+  }
+  const res = await allFn()
+  ctx.success(res, '成功')
+}

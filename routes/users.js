@@ -137,5 +137,61 @@ router.get('/getInfo', user.getInfo)
  */
 // #endregion
 router.post('/modify', user.modify)
+// #region
+/**
+ * @swagger
+ * /user/resetPass:
+ *   post:
+ *     description: 重置密码
+ *     tags: [用户模块]
+ *     produces:
+ *       - application/x-www-form-urlencoded
+ *     parameters:
+ *       - name: email
+ *         description: 邮箱地址
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: 新密码
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: code
+ *         description: 邮箱验证码
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
 router.post('/resetPass', user.resetPass)
+// #region
+/**
+ * @swagger
+ * /user/checkEmail:
+ *   post:
+ *     description: 更换绑定邮箱
+ *     tags: [用户模块]
+ *     produces:
+ *       - application/x-www-form-urlencoded
+ *     parameters:
+ *       - name: email
+ *         description: 新邮箱地址
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: code
+ *         description: 邮箱验证码
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/checkEmail', user.checkEmail)
 module.exports = router
