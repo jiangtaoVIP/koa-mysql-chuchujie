@@ -173,7 +173,7 @@ exports.getInfo = async (ctx) => {
           resolve(res)
         }
       } else {
-        resolve()
+        resolve('')
       }
     })
   }

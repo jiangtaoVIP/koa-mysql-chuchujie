@@ -142,4 +142,25 @@ router.post('/deleteOrder', order.deleteOrder)
  */
 // #endregion
 router.post('/details', order.details)
+// #region
+/**
+ * @swagger
+ * /order/searchOederList:
+ *   post:
+ *     description: 搜索订单列表
+ *     tags: [商品模块]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: name
+ *         description: 商品搜索关键词（精确搜索空格隔开）
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/searchOederList', order.searchOederList)
 module.exports = router

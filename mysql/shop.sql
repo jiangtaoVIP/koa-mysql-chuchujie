@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 31/12/2020 15:48:23
+ Date: 09/01/2021 15:10:18
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `admin_user`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin_user
@@ -219,6 +219,27 @@ INSERT INTO `goodsdetails_list` VALUES (30, 13, 344.00, 555, 34, 36, NULL, NULL)
 INSERT INTO `goodsdetails_list` VALUES (31, 13, 444.00, 444, 35, 36, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for goodsdetails_rate
+-- ----------------------------
+DROP TABLE IF EXISTS `goodsdetails_rate`;
+CREATE TABLE `goodsdetails_rate`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '评论id',
+  `userId` int(11) NULL DEFAULT NULL,
+  `goodsId` int(11) NULL DEFAULT NULL COMMENT '所属哪个商品的评论',
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '评论说明',
+  `count` tinyint(1) NULL DEFAULT NULL COMMENT '评分等级',
+  `createTime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updateTime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of goodsdetails_rate
+-- ----------------------------
+INSERT INTO `goodsdetails_rate` VALUES (1, 1, 1, '不错真不错地跌多少多所多所多', 5, '2021-01-04 16:49:54', '2021-01-04 16:49:54');
+INSERT INTO `goodsdetails_rate` VALUES (2, 1, 1, '对谁都是多所多所多所多所多所', 2, '2021-01-05 10:44:21', '2021-01-05 10:44:21');
+
+-- ----------------------------
 -- Table structure for goodsdetails_sku
 -- ----------------------------
 DROP TABLE IF EXISTS `goodsdetails_sku`;
@@ -362,7 +383,7 @@ CREATE TABLE `shop_order`  (
   `descText` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单备注（可为空）',
   `addressId` int(11) NULL DEFAULT NULL COMMENT '订单收货地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shop_order
@@ -380,6 +401,8 @@ INSERT INTO `shop_order` VALUES (21, 'e899666ee2e78aec969496016af1bb01', '2020-1
 INSERT INTO `shop_order` VALUES (22, '03f6b078dbb1cb55edcfcab2b487f623', '2020-12-21 16:53:19', '2020-12-25 12:01:13', 1, 7, '[{\"listId\":17,\"cart_num\":17}]', 0, 'DFH', '', 26);
 INSERT INTO `shop_order` VALUES (25, 'fc050cffc2cd38c648107eddb64bbcd4', '2020-12-28 10:26:13', '2020-12-28 10:26:13', 1, 14, '[{\"cart_num\":24}]', 1, 'DFK', '', 26);
 INSERT INTO `shop_order` VALUES (26, '91bd091c970ee2dc59718a3eba8b074b', '2020-12-28 10:26:13', '2020-12-28 10:26:13', 1, 7, '[{\"listId\":17,\"cart_num\":1},{\"listId\":16,\"cart_num\":20}]', 0, 'DFK', '', 26);
+INSERT INTO `shop_order` VALUES (27, '07dcb0cd10c3fbd0f93af164c4f24cbd', '2021-01-04 10:29:17', '2021-01-04 10:29:17', 1, 12, '[{\"listId\":29,\"cart_num\":1}]', 0, 'DFK', '擐甲挥戈', 26);
+INSERT INTO `shop_order` VALUES (28, '01326a9af17a4328dc76474e6b4b278a', '2021-01-04 10:29:52', '2021-01-04 10:29:52', 1, 12, '[{\"listId\":28,\"cart_num\":1}]', 0, 'DFK', '看看', 26);
 
 -- ----------------------------
 -- Table structure for shop_user
@@ -419,7 +442,7 @@ CREATE TABLE `shopcart`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 97 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 99 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Records of shopcart

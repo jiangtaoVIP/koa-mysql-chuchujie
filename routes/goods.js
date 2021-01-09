@@ -82,7 +82,7 @@ router.post('/goodDetails', goods.goodDetails)
  * @swagger
  * /goods/searchGoodsList:
  *   post:
- *     description: 根据商品id 获取详情
+ *     description: 搜索商品
  *     tags: [商品模块]
  *     produces:
  *       - application/json

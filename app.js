@@ -5,7 +5,7 @@ const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 // const bodyparser = require('koa-bodyparser')
-
+const fs = require('fs')
 const logger = require('koa-logger')
 // 引入中间件 统一消息返回处理
 const routerResponse =  require('./middleware/routerResponse')
@@ -22,18 +22,7 @@ const koaSwagger = require('koa2-swagger-ui').koaSwagger;
 const cors = require('koa2-cors')
 
 const static = require('koa-static')
-
-const index = require('./routes/index')
-const users = require('./routes/users')
-const captcha = require('./routes/captcha')
-const upload = require('./routes/upload')
-const address = require('./routes/address')
-const goods = require('./routes/goods')
-const home = require('./routes/home')
-const shopCart = require('./routes/shopCart')
-const adminUser = require('./routes/adminUser')
-const order = require('./routes/order')
-const emailVerify = require('./routes/emailVerify')
+const staticCache = require('koa-static-cache')
 // error handler
 onerror(app)
 
@@ -77,6 +66,11 @@ app.use(logger())
 app.use(static(__dirname))
 // app.use(require('koa-static')(__dirname + '/upload'))
 // app.use(require('koa-static')(__dirname + '/public'))
+
+// 缓存
+app.use(staticCache(path.join(__dirname, '/upload'), { dynamic: true }, {
+  maxAge: 365 * 24 * 60 * 60
+}))
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
@@ -146,17 +140,19 @@ app.use(
   })
 )
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
-app.use(captcha.routes(), captcha.allowedMethods())
-app.use(upload.routes(), upload.allowedMethods())
-app.use(address.routes(), address.allowedMethods())
-app.use(goods.routes(), goods.allowedMethods())
-app.use(home.routes(), home.allowedMethods())
-app.use(shopCart.routes(), shopCart.allowedMethods())
-app.use(adminUser.routes(), adminUser.allowedMethods())
-app.use(order.routes(), order.allowedMethods())
-app.use(emailVerify.routes(), emailVerify.allowedMethods())
+// app.use(emailVerify.routes(), emailVerify.allowedMethods())
+// 直接引入文件夹的全部路由
+fs.readdir('./routes', (err, files) => {
+  if (!err) {
+    if (files.length > 0) {
+      files.forEach(item => {
+        app.use(require(`./routes/${item}`).routes())
+      })
+      
+    }
+  }
+})
+
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)

@@ -153,6 +153,17 @@ function listSelect(list) {
     }
   })
 }
+function addressDetails(id) {
+  return new Promise(async(resolve) => {
+    const res = await mySqlServer.mySql(`select * from shop_address where id = ${id}`)
+    if (res.length > 0) {
+      res[0]['isDefault'] = res[0].isDefault != 0
+      resolve(res[0])
+    } else {
+      resolve({})
+    }
+  })
+} 
 // end
 exports.getStatusList = async(ctx) => {
   const { page, size, orderStatus} = ctx.request.body
@@ -272,25 +283,14 @@ exports.details = async (ctx) => {
     ctx.fail('参数错误', -1)
     return
   }
-  function addressDetails(id) {
-    return new Promise(async(resolve) => {
-      const res = await mySqlServer.mySql(`select * from shop_address where id = ${id}`)
-      if (res.length > 0) {
-        res[0]['isDefault'] = res[0].isDefault != 0
-        resolve(res[0])
-      } else {
-        resolve({})
-      }
-    })
-  } 
   const allFn = new Promise(async(resolve) => {
     const sql = `select * from shop_order where id = ${id}`
     const res = await mySqlServer.mySql(sql)
     if (res.length > 0) {
-      // 方法放在了外面
+      // 方法放在了外面 goodsdetails listSelect
       const goods_res = await goodsdetails(res[0].goodsId)
       const list_res = await listSelect(res[0].list)
-      // 获得地址详情
+      // 方法放在了外面 获得地址详情
       const address_res = await addressDetails(res[0].addressId)
       if (goods_res && list_res && address_res) {
         res[0]['goods'] = goods_res.goods
@@ -311,4 +311,95 @@ exports.details = async (ctx) => {
   } else {
     ctx.fail('失败', -1)
   }
+}
+
+exports.searchOederList = async(ctx) => {
+  const userId = jwt.verify(ctx.header)
+  if (!userId || userId == -1) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  // 商品数据列表信息和订单列表是分开的
+  // 先迷糊查询商品 再查询是否在订单中有这个商品
+  const { name } = ctx.request.body
+  if (!name) {
+    ctx.success([], '成功')
+    return
+  }
+  let nameList = []
+  nameList = name.split(' ')
+  for (let i =0; i < nameList.length; i++) {
+    nameList[i] = `name like '%${nameList[i]}%' and`
+  }
+  nameList = nameList.toString()
+  if (nameList.indexOf('and') !== -1) {
+    nameList = nameList.substr(0, nameList.length - 3)
+  }
+  nameList = nameList.replace(/,/g, ' ')
+  // 查询用户所属的id 订单列表
+  function selectOrder(list) {
+    return new Promise(async(resolve) => {
+      const sql = `select * from shop_order where userId = ${userId}`
+      const res = await mySqlServer.mySql(sql)
+      if (res !== undefined && res.length > 0) {
+        const serachList = []
+        res.forEach(item => {
+          list.forEach(v => {
+            if (item.goodsId == v.id) {
+              serachList.push(item)
+            }
+          })
+        })
+        resolve(serachList)
+      } else {
+        resolve([])
+      }
+    })
+  }
+  function getGoodsPromise(res) {
+    return new Promise(async(resolve) => {
+      // 方法放在了外面 goodsdetails listSelect
+      const goods_res = await goodsdetails(res.goodsId)
+      const list_res = await listSelect(res.list)
+      // 方法放在了外面 获得地址详情
+      const address_res = await addressDetails(res.addressId)
+      if (goods_res && list_res && address_res) {
+        res['goods'] = goods_res.goods
+        res['admin'] = goods_res.admin
+        res['list'] = list_res
+        res['address'] = address_res
+        resolve(res)
+      } else {
+        resolve(res)
+      }
+    })
+  }
+  function allFn() {
+    return new Promise(async(resolve) => {
+      const sql = `select * from goodsdetails where ${nameList}`
+      console.log(sql)
+      const res = await mySqlServer.mySql(sql)
+      if (res !== undefined && res.length > 0) {
+        // 先用名称 匹配商品列表
+        selectOrder(res).then(result => {
+          // 返回对应的订单数据 再轮询获取订单详情返回
+          let fag = 0
+          const data = []
+          for (let i = 0; i < result.length; i++) {
+            getGoodsPromise(result[i]).then(v => {
+              fag ++
+              data.push(v)
+              if (fag === result.length) {
+                resolve(data)
+              }
+            })
+          }
+        })
+      } else {
+        resolve([])
+      }
+    })
+  }
+  const res = await allFn()
+  ctx.success(res, '成功')
 }
