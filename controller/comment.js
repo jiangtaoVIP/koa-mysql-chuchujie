@@ -52,8 +52,18 @@ exports.getStatusList = async(ctx) => {
   }
   function ToTalFn() {
     return new Promise(async(resolve) => {
-      // 获取分页数量
-      const sql = `select count(*) from goodsdetails_rate where goodsId=${goodsId}`
+      // 按状态获取分页数量
+      let sql = ``
+      switch (status) {
+        case '': // 全部
+          sql = `select count(*) from goodsdetails_rate where goodsId=${goodsId} order by rand() limit ${(page-1)*size},${size}`
+        break
+        case 'newest': // 最新
+          sql = `select count(*) from goodsdetails_rate where goodsId=${goodsId} order by updateTime desc limit ${(page-1)*size},${size}`
+        break
+        case 'own': // 自己
+          sql = `select count(*) from goodsdetails_rate where goodsId=${goodsId} and userId=${userId} order by updateTime desc limit ${(page-1)*size},${size}`
+      }
       const res = await mySqlServer.mySql(sql)
       if (res !== undefined && res.length > 0) {
         resolve(res[0]['count(*)'])

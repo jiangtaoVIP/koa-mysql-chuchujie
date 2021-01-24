@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 09/01/2021 15:10:18
+ Date: 24/01/2021 14:08:06
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `admin_user`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin_user
@@ -231,13 +231,14 @@ CREATE TABLE `goodsdetails_rate`  (
   `createTime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updateTime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goodsdetails_rate
 -- ----------------------------
 INSERT INTO `goodsdetails_rate` VALUES (1, 1, 1, '不错真不错地跌多少多所多所多', 5, '2021-01-04 16:49:54', '2021-01-04 16:49:54');
 INSERT INTO `goodsdetails_rate` VALUES (2, 1, 1, '对谁都是多所多所多所多所多所', 2, '2021-01-05 10:44:21', '2021-01-05 10:44:21');
+INSERT INTO `goodsdetails_rate` VALUES (3, 47, 1, 'ddsdsdsdsd', NULL, '2021-01-16 16:52:12', '2021-01-16 16:55:18');
 
 -- ----------------------------
 -- Table structure for goodsdetails_sku
@@ -383,7 +384,7 @@ CREATE TABLE `shop_order`  (
   `descText` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单备注（可为空）',
   `addressId` int(11) NULL DEFAULT NULL COMMENT '订单收货地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shop_order
@@ -421,12 +422,13 @@ CREATE TABLE `shop_user`  (
   `createTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建地址',
   `updateTime` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`userId`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 47 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 48 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shop_user
 -- ----------------------------
 INSERT INTO `shop_user` VALUES (1, '有人@你', '18899796648', '2968324953@qq.com', 'M', '$2a$10$xaSX9eafON00WTmpBYVi9OTD/WYEwyATKwGvMUJ64ckUqT8ZTZzWW', '10000', '1609084800000', '的技术交底大家都减速电机三件大事的师父是非得失', '2020-12-21 09:55:41', '2020-12-31 09:43:31');
+INSERT INTO `shop_user` VALUES (47, '矢心', '13044244002', 'jiangtao@shoyii.com', 'W', '$2a$10$xaSX9eafON00WTmpBYVi9OTD/WYEwyATKwGvMUJ64ckUqT8ZTZzWW', '10000', '1609084800000', '第四季度计算的', '2021-01-16 16:54:39', '2021-01-16 16:54:58');
 
 -- ----------------------------
 -- Table structure for shopcart
