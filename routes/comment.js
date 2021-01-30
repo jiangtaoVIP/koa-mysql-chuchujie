@@ -37,4 +37,40 @@ router.prefix('/comment')
  */
 // #endregion
 router.post('/getStatusList', comment.getStatusList)
+// #region
+/**
+ * @swagger
+ * /comment/add:
+ *   post:
+ *     description: 添加评价
+ *     tags: [评论模块]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: count
+ *         description: 评价星数
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: description
+ *         description: 评价内容
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: goodsId
+ *         description: 商品id
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: orderId
+ *         description: 订单id
+ *         in: formData
+ *         required: true
+ *         type: string
+ *     responses:
+ *       0:
+ *         description: 成功
+ */
+// #endregion
+router.post('/add', comment.add)
 module.exports = router

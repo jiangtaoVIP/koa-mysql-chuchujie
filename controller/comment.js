@@ -2,6 +2,7 @@
 const mySqlServer = require("../mysql/index.js")
 const jwt = require('../model/tokenFn')
 const { getFile } = require('../model/getfile')
+
 exports.getStatusList = async(ctx) => {
   const userId = jwt.verify(ctx.header)
   if (!userId || userId == -1) {
@@ -127,5 +128,47 @@ exports.getStatusList = async(ctx) => {
     ctx.success(body, '成功')
   } else {
     ctx.fail('失败', -1)
+  }
+}
+exports.add = async(ctx) => {
+  const userId = jwt.verify(ctx.header)
+  if (!userId || userId == -1) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  const { count, description, goodsId, orderId } = ctx.request.body
+  if (!count || !description || !goodsId || !orderId) {
+    ctx.fail('参数错误', -1)
+    return
+  }
+  function addRate() {
+    return new Promise(async(resolve) => {
+      const params = [count, description, goodsId, userId]
+      const sql = `insert into goodsdetails_rate (count,description,goodsId,userId) values (?,?,?,?)`
+      const res = await mySqlServer.mySql(sql, params)
+      if (res) {
+        resolve(0)
+      } else {
+        resolve(-1)
+      }
+    })
+  }
+  function editOrder() {
+    return new Promise(async(resolve) => {
+      const sql = `update shop_order set orderStatus = 'YWC' where id = ${orderId}`
+      const res = await mySqlServer.mySql(sql)
+      if (res) {
+        resolve(0)
+      } else {
+        resolve(-1)
+      }
+    })
+  }
+  const addRate_res = await addRate()
+  const editOrder_res = await editOrder()
+  if (addRate_res === 0 && editOrder_res === 0) {
+    ctx.success('', 'P评价成功')
+  } else {
+    ctx.fail('评价失败', -1)
   }
 }

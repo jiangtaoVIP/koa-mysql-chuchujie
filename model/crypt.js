@@ -11,5 +11,6 @@ exports.encrypt = (pass) => {
 
 // 验证比对,返回布尔值表示验证结果 true表示一致，false表示不一致
 exports.decrypt = (pass, hash) => {
+  console.log(bcrypt.compareSync(pass, hash), '验证比对,返回布尔值表示验证结果 true表示一致，false表示不一致')
   return bcrypt.compareSync(pass, hash) 
 }
