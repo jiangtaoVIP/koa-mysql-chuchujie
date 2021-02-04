@@ -45,7 +45,7 @@ exports.getStatusList = async(ctx) => {
         avatarFn(res[0].avatar).then(avatar_res => {
           res[0].avatar = avatar_res
           resolve(res[0])
-        })
+        }) 
       } else {
         resolve({})
       }

@@ -5,7 +5,7 @@ const { encrypt, decrypt } = require('../model/crypt')
 
 const EmailConfig = require('../config/email')
 const Redis = require('koa-redis')
-//新建redis客户端
+//新建连接redis客户端
 const Store = Redis({ host: EmailConfig.redis.host, port: EmailConfig.redis.port }).client
 
 exports.getList = async (ctx, next) => {
@@ -303,6 +303,8 @@ exports.resetPass = async(ctx) => {
       } else {
         resolve('请填写正确的验证码')
       }
+    } else {
+      resolve('服务器出错！')
     }
   })
   const res = await allFn

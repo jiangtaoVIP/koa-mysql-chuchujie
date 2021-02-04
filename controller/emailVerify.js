@@ -30,10 +30,10 @@ exports.getEmailVerify = async(ctx) => {
   }
   // 邮件信息
   let mailOptions = {
-    from: `《江涛测试网站》<${EmailConfig.smtp.user}>`,
+    from: `《楚楚街商城》<${EmailConfig.smtp.user}>`,
     to: ko.email,
     subject: '网站验证码',
-    html: `${ko.user} 您好，您正在使用《江涛测试网站》，验证码是：${ko.code}`
+    html: `${ko.user} 您好，您正在使用《楚楚街商城》》，验证码是：${ko.code}`
   };
   const allFn = new Promise(async(resolve) => {
     //校验是不是一分钟之内

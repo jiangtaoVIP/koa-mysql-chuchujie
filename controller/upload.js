@@ -1,7 +1,7 @@
 const fs = require('fs'); // 图片路径
 const path = require('path'); // 图片路径
 const mySqlServer = require("../mysql/index.js")
-const dirnameImage = path.join(__dirname, '../upload/image') // 存放文件的目录
+const dirnameImage = path.join(__dirname, '../../shop-files/image') // 存放文件的目录
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const { DB_HOST, DB_PORT, PRO_HOST, ENV } = process.env
@@ -103,7 +103,7 @@ exports.image = async (ctx, next) => {
         fs.renameSync(filePath, dirnameImage + `/${res.insertId}.${fileType}`)
         resolve({
           id: res.insertId,
-          url: ENV == 'production' ? `http://${PRO_HOST}/upload/image/${res.insertId}.${fileType}` : `http://${DB_HOST}:${DB_PORT}/upload/image/${res.insertId}.${fileType}`
+          url: ENV == 'production' ? `http://${PRO_HOST}/image/${res.insertId}.${fileType}` : `http://${DB_HOST}:${DB_PORT}/image/${res.insertId}.${fileType}`
         })
       } else {
         reject(-1)

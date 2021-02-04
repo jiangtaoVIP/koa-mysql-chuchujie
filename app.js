@@ -63,12 +63,13 @@ app.use(json())
 app.use(logger())
 
 // 设置整个服务器端口为静态资源文件 本来想设置多个文件夹 未能解决
-app.use(static(__dirname))
+// console.log(__dirname, path.join(__dirname, '../shop-files'), '__dirname')
+// app.use(static(path.join(__dirname, '../shop-files')))
 // app.use(require('koa-static')(__dirname + '/upload'))
-// app.use(require('koa-static')(__dirname + '/public'))
+app.use(require('koa-static')(path.join(__dirname, '../shop-files')))
 
 // 缓存
-app.use(staticCache(path.join(__dirname, '/upload'), { dynamic: true }, {
+app.use(staticCache(path.join(__dirname, '../shop-files'), { dynamic: true }, {
   maxAge: 365 * 24 * 60 * 60
 }))
 

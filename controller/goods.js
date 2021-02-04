@@ -28,7 +28,7 @@ exports.categoryTwo = async(ctx, next) => {
         res.forEach(item => {
           all.forEach(it => {
             if (item.icon == it[0].id) {
-              item.icon = ENV == 'production' ? `http://${PRO_HOST}/upload/image/${it[0].id}.${it[0].type}` : `http://${DB_HOST}:${DB_PORT}/upload/image/${it[0].id}.${it[0].type}`
+              item.icon = ENV == 'production' ? `http://${PRO_HOST}/image/${it[0].id}.${it[0].type}` : `http://${DB_HOST}:${DB_PORT}/image/${it[0].id}.${it[0].type}`
             }
           })
         })

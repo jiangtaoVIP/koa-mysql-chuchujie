@@ -7,7 +7,7 @@ exports.getFile = (id) => {
     const fileSql = `select * from file where id=${id}`
     const res = await mySqlServer.mySql(fileSql)
     if (res) {
-      let url = ENV == 'production' ? `http://${PRO_HOST}/upload/image/${res[0].id}.${res[0].type}` : `http://${DB_HOST}:${DB_PORT}/upload/image/${res[0].id}.${res[0].type}`
+      let url = ENV == 'production' ? `http://${PRO_HOST}/image/${res[0].id}.${res[0].type}` : `http://${DB_HOST}:${DB_PORT}/image/${res[0].id}.${res[0].type}`
       resolve(url)
     } else {
       resolve(id)
