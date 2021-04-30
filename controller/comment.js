@@ -136,15 +136,15 @@ exports.add = async(ctx) => {
     ctx.fail('参数错误', -1)
     return
   }
-  const { count, description, goodsId, orderId } = ctx.request.body
-  if (!count || !description || !goodsId || !orderId) {
+  const { count, description, goodsId, orderId, adminId } = ctx.request.body
+  if (!count || !description || !goodsId || !orderId || !adminId) {
     ctx.fail('参数错误', -1)
     return
   }
   function addRate() {
     return new Promise(async(resolve) => {
-      const params = [count, description, goodsId, userId]
-      const sql = `insert into goodsdetails_rate (count,description,goodsId,userId) values (?,?,?,?)`
+      const params = [count, description, goodsId, userId, adminId]
+      const sql = `insert into goodsdetails_rate (count,description,goodsId,userId,orderId,adminId) values (?,?,?,?,?,?)`
       const res = await mySqlServer.mySql(sql, params)
       if (res) {
         resolve(0)
@@ -167,7 +167,7 @@ exports.add = async(ctx) => {
   const addRate_res = await addRate()
   const editOrder_res = await editOrder()
   if (addRate_res === 0 && editOrder_res === 0) {
-    ctx.success('', 'P评价成功')
+    ctx.success('', '评价成功')
   } else {
     ctx.fail('评价失败', -1)
   }
