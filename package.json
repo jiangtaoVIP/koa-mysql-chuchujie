@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node bin/www",
-    "dev": "./node_modules/.bin/nodemon bin/www",
+    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon bin/www .env",
     "prd": "pm2 start bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cls-hooked": "^4.2.2",
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "ejs": "~2.3.3",
@@ -31,7 +32,9 @@
     "koa2-cors": "^2.0.6",
     "koa2-swagger-ui": "^5.0.3",
     "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "nodemailer": "^6.4.17",
+    "sequelize": "^6.6.5",
     "svg-captcha": "^1.4.0",
     "swagger-jsdoc": "^5.0.1"
   },

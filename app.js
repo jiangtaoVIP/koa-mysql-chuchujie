@@ -12,21 +12,15 @@ const routerResponse =  require('./middleware/routerResponse')
 // 引入 jwt
 const koajwt = require('koa-jwt')
 
-// 引入 koa-session
-const Koa_Session = require('koa-session')
-// signed属性签名key
-const session_signed_key = ['appletsystem']
-const sessionConfig = require('./config/session')
-const koaSwagger = require('koa2-swagger-ui').koaSwagger;
-
 const cors = require('koa2-cors')
 
-const static = require('koa-static')
+// const static = require('koa-static')
 const staticCache = require('koa-static-cache')
 // error handler
 onerror(app)
 
 // swagger配置
+const koaSwagger = require('koa2-swagger-ui').koaSwagger;
 const swagger = require('./config/swagger');
 app.use(swagger.routes(), swagger.allowedMethods())
 app.use(
@@ -101,7 +95,7 @@ app.use((ctx, next) => {
 })
 
 app.use(koajwt({
-  secret: 'my_token'
+  secret: 'user_token'
 }).unless({
   path: [/\/user\/login/, /\/user\/resetPass/, /\/user\/register/, /\/captcha/, /\/favicon/, /\/upload/, /\/emailVerify/]
 }))
@@ -112,6 +106,12 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+// 引入 koa-session
+const Koa_Session = require('koa-session')
+// signed属性签名key
+const session_signed_key = ['appletsystem']
+const sessionConfig = require('./config/session')
 // session 实例化
 const session = Koa_Session(sessionConfig, app)
 app.keys = session_signed_key
@@ -123,7 +123,7 @@ app.use(koaBody({
     multipart: true,
     formidable: {
       keepExtensions: true,
-      maxFileSize: 200 * 1024 * 1024    // 设置上传文件大小最大限制，默认2M
+      maxFileSize: 200 * 1024 * 1024    // 设置上传文件大小最大限制，默认200M
     }
 }))
 
@@ -141,18 +141,27 @@ app.use(
   })
 )
 // routes
-// app.use(emailVerify.routes(), emailVerify.allowedMethods())
+const users = require('./routes/users')
+const emailVerify = require('./routes/emailVerify')
+const captcha = require('./routes/captcha')
+const upload = require('./routes/upload')
+const shopCart = require('./routes/shopCart')
+app.use(users.routes(), users.allowedMethods())
+app.use(emailVerify.routes(), emailVerify.allowedMethods())
+app.use(captcha.routes(), captcha.allowedMethods())
+app.use(upload.routes(), upload.allowedMethods())
+app.use(shopCart.routes(), shopCart.allowedMethods())
 // 直接引入文件夹的全部路由
-fs.readdir('./routes', (err, files) => {
-  if (!err) {
-    if (files.length > 0) {
-      files.forEach(item => {
-        app.use(require(`./routes/${item}`).routes())
-      })
+// fs.readdir('./routes', (err, files) => {
+//   if (!err) {
+//     if (files.length > 0) {
+//       files.forEach(item => {
+//         app.use(require(`./routes/${item}`).routes())
+//       })
       
-    }
-  }
-})
+//     }
+//   }
+// })
 
 // error-handling
 app.on('error', (err, ctx) => {
