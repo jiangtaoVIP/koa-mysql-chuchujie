@@ -5,7 +5,7 @@ router.prefix('/home')
 // #region
 /**
  * @swagger
- * /home/data:
+ * /home/getData:
  *   get:
  *     description: 首页数据
  *     tags: [首页模块]

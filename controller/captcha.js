@@ -11,9 +11,9 @@ exports.verification = async (ctx, next) => {
     height: 30,
     background:'#f6f6f6'
   });
-    ctx.session.captcha = captcha.text.toLowerCase()
     ctx.set('Content-Type', 'image/svg+xml')
     ctx.success(captcha.data, '成功')
     // ctx.body = captcha.data // 验证码
+    ctx.session.captcha = captcha.text.toLowerCase()
     console.log('验证码', ctx.session.captcha)
   }

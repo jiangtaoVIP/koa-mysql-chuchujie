@@ -58,7 +58,7 @@ router.post('/add', shopCart.add)
  * @swagger
  * /shopCart/delete:
  *   post:
- *     description: 加入购物车
+ *     description: 删除购物车（可传单个多个,隔开）
  *     tags: [购物车模块]
  *     produces:
  *       - multipart/form-data
@@ -79,7 +79,7 @@ router.post('/delete', shopCart.delete)
  * @swagger
  * /shopCart/edit:
  *   post:
- *     description: 加入购物车
+ *     description: 修改购物车
  *     tags: [购物车模块]
  *     produces:
  *       - multipart/form-data
@@ -90,7 +90,12 @@ router.post('/delete', shopCart.delete)
  *         required: true
  *         type: number
  *       - name: listId
- *         description: list类目组合id
+ *         description: list类目组合id 无规格商品false非必填，有规格商品必填
+ *         in: formData
+ *         required: false
+ *         type: number
+ *       - name: oldListId
+ *         description: list类目组合id 无规格商品false非必填，有规格商品必填
  *         in: formData
  *         required: false
  *         type: number

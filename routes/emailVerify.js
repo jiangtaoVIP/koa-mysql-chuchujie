@@ -4,9 +4,9 @@ router.prefix('/emailVerify')
 // #region
 /**
  * @swagger
- * /emailVerify:
+ * /emailVerify 获取邮箱验证码（2分钟内有效）:
  *   post:
- *     description: 获取邮箱验证码
+ *     description: 获取邮箱验证码（2分钟内有效）
  *     tags: [验证模块]
  *     produces:
  *       - application/json

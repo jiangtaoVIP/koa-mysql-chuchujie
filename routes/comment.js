@@ -62,6 +62,11 @@ router.post('/getStatusList', comment.getStatusList)
  *         in: formData
  *         required: true
  *         type: string
+ *       - name: adminId
+ *         description: 商品所属店铺id
+ *         in: formData
+ *         required: true
+ *         type: string
  *       - name: orderId
  *         description: 订单id
  *         in: formData

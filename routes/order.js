@@ -27,6 +27,11 @@ router.prefix('/order')
  *         in: formData
  *         required: true
  *         type: number
+ *       - name: adminId
+ *         description: 商品所属店铺id
+ *         in: formData
+ *         required: true
+ *         type: number
  *       - name: list
  *         description: list规格数据
  *         in: formData
@@ -89,7 +94,7 @@ router.post('/getStatusList', order.getStatusList)
  *         in: formData
  *         required: true
  *         type: number
- *       - name: szie
+ *       - name: orderStatus
  *         description: 订单状态（DFK,DFH,DSH,DPJ）（代付款，代发货，待收货，待评价）
  *         in: formData
  *         required: true

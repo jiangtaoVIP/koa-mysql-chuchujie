@@ -141,27 +141,16 @@ app.use(
   })
 )
 // routes
-const users = require('./routes/users')
-const emailVerify = require('./routes/emailVerify')
-const captcha = require('./routes/captcha')
-const upload = require('./routes/upload')
-const shopCart = require('./routes/shopCart')
-app.use(users.routes(), users.allowedMethods())
-app.use(emailVerify.routes(), emailVerify.allowedMethods())
-app.use(captcha.routes(), captcha.allowedMethods())
-app.use(upload.routes(), upload.allowedMethods())
-app.use(shopCart.routes(), shopCart.allowedMethods())
 // 直接引入文件夹的全部路由
-// fs.readdir('./routes', (err, files) => {
-//   if (!err) {
-//     if (files.length > 0) {
-//       files.forEach(item => {
-//         app.use(require(`./routes/${item}`).routes())
-//       })
-      
-//     }
-//   }
-// })
+fs.readdir('./routes', (err, files) => {
+  if (!err) {
+    if (files.length > 0) {
+      files.forEach(item => {
+        app.use(require(`./routes/${item}`).routes())
+      })
+    }
+  }
+})
 
 // error-handling
 app.on('error', (err, ctx) => {

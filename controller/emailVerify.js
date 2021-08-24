@@ -1,8 +1,10 @@
+/* eslint-disable no-async-promise-executor */
 const EmailConfig = require('../config/email')
 const nodemailer = require('nodemailer')
+
 const Redis = require('koa-redis')
 //新建redis客户端
-const Store = Redis({ host: EmailConfig.redis.host, port: EmailConfig.redis.port }).client
+const Store =  Redis({ host: EmailConfig.redis.host, port: EmailConfig.redis.port }).client
 
 exports.getEmailVerify = async(ctx) => {
   const { email } = ctx.request.body
@@ -33,7 +35,7 @@ exports.getEmailVerify = async(ctx) => {
     from: `《楚楚街商城》<${EmailConfig.smtp.user}>`,
     to: ko.email,
     subject: '网站验证码',
-    html: `${ko.user} 您好，您正在使用《楚楚街商城》》，验证码是：${ko.code}`
+    html: `${ko.user} 您好，您正在使用《楚楚街商城》，验证码是：${ko.code}，5分钟内有效。验证码提供给他人可能导致帐号被盗，请勿泄露，谨防被骗。`
   };
   const allFn = new Promise(async(resolve) => {
     //校验是不是一分钟之内
@@ -42,6 +44,7 @@ exports.getEmailVerify = async(ctx) => {
       resolve('验证请求过于频繁，5分钟内只能发送1次')
     } else {
       //发送邮件
+      // eslint-disable-next-line no-unused-vars
       transporter.sendMail(mailOptions, async(error, info) => {
         if (error) {
           console.log(error)
