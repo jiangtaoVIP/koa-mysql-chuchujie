@@ -12,7 +12,7 @@ exports.getFile = (id) => {
       resolve(id)
       return
     }
-    let data = id.split(',')
+    let data = id.toString().split(',')
     let flag = 0
     for (let i = 0; i < data.length; i++) {
       // 不区分是 网络地址还是id了直接查询
